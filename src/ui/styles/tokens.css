@@ -1,0 +1,84 @@
+/* ==========================================================================
+   디자인 토큰
+   - 모든 치수는 "디자인 픽셀(dp)" 단위. 1dp = var(--u) CSS px.
+   - --u 는 app/metrics.ts 가 DPR 보정값(디바이스 픽셀 정수배)으로 덮어쓴다.
+   - 팔레트/타이포 근거: docs/02-design-system.md A1~A3
+   - TS 쪽 거울: src/pixel/palette.ts (캔버스가 hex 를 직접 써야 하므로 둘을 같이 고친다)
+   ========================================================================== */
+:root {
+  --u: 2px;
+
+  /* 중성색 램프 (네이비) */
+  --ink: #0d1020;
+  --bg-0: #141a2e;
+  --bg-1: #1c2440;
+  --bg-2: #27305a;
+  --bg-3: #354074;
+  --line-0: #4c5a94;
+  --line-1: #7c88b8;
+  --text-1: #b4bddc;
+  --text-0: #f4f1e8;
+  --white: #ffffff;
+
+  /* 유채색 */
+  --red: #ff5e5b;
+  --orange: #ffa94d;
+  --yellow: #ffd166;
+  --lime: #9be564;
+  --teal: #3fbfb2;
+  --cyan: #4fd6e8;
+  --blue: #6e9bff;
+  --purple: #c792ea;
+  --pink: #ff8fb1;
+
+  /* 시맨틱 */
+  --danger: var(--red);
+  --success: var(--lime);
+  --warning: var(--yellow);
+  --info: var(--blue);
+
+  /* 캐릭터 accent — app/theme.ts 가 선택 캐릭터 색으로 덮어쓴다. 기본(중립) = cyan */
+  --accent: #4fd6e8;
+  --accent-dark: #2a93b0;
+  --accent-light: #a8eef7;
+  --accent-text: var(--accent-light); /* 작은 글자에 accent 를 쓸 때 */
+  --accent-ink: var(--ink); /* accent 채움 위의 글자색 (흰색 금지) */
+  --accent-tint: color-mix(in srgb, var(--accent) 18%, var(--bg-1));
+  --focus: var(--accent);
+
+  /* 오버레이 */
+  --dim: rgb(13 16 32 / 0.72);
+
+  /* 간격 (dp) */
+  --sp-1: calc(1 * var(--u));
+  --sp-2: calc(2 * var(--u));
+  --sp-3: calc(3 * var(--u));
+  --sp-4: calc(4 * var(--u));
+  --sp-6: calc(6 * var(--u));
+  --sp-8: calc(8 * var(--u));
+  --sp-12: calc(12 * var(--u));
+  --sp-16: calc(16 * var(--u));
+  --sp-24: calc(24 * var(--u));
+  --sp-32: calc(32 * var(--u));
+
+  /* 폰트 패밀리 (Galmuri 네이티브 em: Galmuri14→15px, 11→12px, 9→10px, 7→8px) */
+  --font-display: Galmuri14, Galmuri11, sans-serif;
+  --font-body: Galmuri11, sans-serif;
+  --font-small: Galmuri9, Galmuri11, sans-serif;
+  --font-caption: Galmuri7, Galmuri9, sans-serif;
+  --font-mono: GalmuriMono11, Galmuri11, monospace;
+
+  /* 타이포 크기/행간 (dp) — 전부 네이티브 em 의 정수배 */
+  --fs-display: calc(30 * var(--u));
+  --lh-display: calc(36 * var(--u));
+  --fs-h1: calc(15 * var(--u));
+  --lh-h1: calc(18 * var(--u));
+  --fs-body: calc(12 * var(--u));
+  --lh-body: calc(14 * var(--u));
+  --fs-small: calc(10 * var(--u));
+  --lh-small: calc(12 * var(--u));
+  --fs-caption: calc(8 * var(--u));
+  --lh-caption: calc(10 * var(--u));
+  --fs-num-l: calc(24 * var(--u));
+  --lh-num-l: calc(28 * var(--u));
+}

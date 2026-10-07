@@ -1,11 +1,75 @@
-/* 0단계 최소 베이스. 1단계에서 토큰/폰트/레이아웃으로 확장 */
+/* 리셋 + 도트 렌더링 전역 설정 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--text-0);
+  background: var(--bg-0);
+  /* 비트맵 기원 폰트: 안티앨리어싱/커닝/가짜 볼드를 전부 끈다 */
+  -webkit-font-smoothing: none;
+  text-rendering: optimizeSpeed;
+  font-kerning: none;
+  letter-spacing: 0;
+  font-synthesis: none;
+  -webkit-text-size-adjust: 100%;
+}
+
 html,
 body,
 #root {
-  margin: 0;
-  min-height: 100%;
+  height: 100%;
 }
+
 body {
-  background: #141a2e;
-  color: #f4f1e8;
+  margin: 0;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+figure {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* 기본 포커스 링. 메뉴/카드의 커서는 .is-focused 가 별도로 담당 */
+:focus-visible {
+  outline: var(--sp-1) solid var(--focus);
+  outline-offset: var(--sp-1);
+}
+
+canvas,
+img.sprite,
+.pixelated {
+  image-rendering: pixelated;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
 }

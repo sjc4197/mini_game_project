@@ -14,7 +14,10 @@
           "error",
           {
             "paths": [
-              { "name": "react", "message": "게임 모듈은 React를 import하지 않습니다 (games/types.ts 계약만 사용)" },
+              {
+                "name": "react",
+                "message": "게임 모듈은 React를 import하지 않습니다 (games/types.ts 계약만 사용)"
+              },
               { "name": "react-dom", "message": "게임 모듈은 React를 import하지 않습니다" }
             ]
           }
