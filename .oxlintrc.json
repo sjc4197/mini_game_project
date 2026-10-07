@@ -1,0 +1,25 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "typescript", "oxc"],
+  "ignorePatterns": ["dist", "docs"],
+  "rules": {
+    "react/rules-of-hooks": "error",
+    "react/only-export-components": ["warn", { "allowConstantExport": true }]
+  },
+  "overrides": [
+    {
+      "files": ["src/games/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              { "name": "react", "message": "게임 모듈은 React를 import하지 않습니다 (games/types.ts 계약만 사용)" },
+              { "name": "react-dom", "message": "게임 모듈은 React를 import하지 않습니다" }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
