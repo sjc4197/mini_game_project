@@ -1,0 +1,61 @@
+.page {
+  max-width: calc(520 * var(--u));
+  margin: 0 auto;
+  padding: var(--sp-8) var(--sp-8) var(--sp-32);
+  display: grid;
+  gap: var(--sp-12);
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+
+.section {
+  display: grid;
+  gap: var(--sp-4);
+}
+
+.sectionTitle {
+  color: var(--accent-text);
+  border-bottom: var(--sp-1) solid var(--line-0);
+  padding-bottom: var(--sp-1);
+}
+
+.muted {
+  color: var(--text-1);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--sp-6);
+}
+
+.cell {
+  display: grid;
+  justify-items: center;
+  gap: var(--sp-2);
+}
+
+/* 투명 영역이 보이도록 아주 옅은 체커 */
+.stage {
+  background: repeating-conic-gradient(var(--bg-2) 0 25%, var(--bg-1) 0 50%) 0 0 /
+    calc(8 * var(--u)) calc(8 * var(--u));
+  box-shadow: 0 0 0 var(--sp-1) var(--line-0);
+  line-height: 0;
+}
+
+.pre {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  line-height: var(--lh-small);
+  color: var(--text-1);
+  white-space: pre;
+  overflow-x: auto;
+  margin: 0;
+}

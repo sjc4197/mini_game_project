@@ -1,0 +1,61 @@
+/* 공용 픽셀 UI 레시피 (4단계에서 PixelButton/PixelPanel 컴포넌트가 이 클래스를 사용) */
+
+/* 1dp 테두리(4방향 섀도, 모서리 1dp 빠짐) + inset 베벨 + 2dp 하드 드롭섀도 */
+.btn {
+  display: inline-block;
+  background: var(--bg-2);
+  color: var(--text-0);
+  padding: var(--sp-2) var(--sp-6);
+  margin: var(--sp-2);
+  box-shadow:
+    0 calc(-1 * var(--u)) 0 0 var(--line-0),
+    0 var(--u) 0 0 var(--line-0),
+    calc(-1 * var(--u)) 0 0 0 var(--line-0),
+    var(--u) 0 0 0 var(--line-0),
+    inset var(--u) var(--u) 0 0 var(--line-1),
+    inset calc(-1 * var(--u)) calc(-1 * var(--u)) 0 0 var(--ink),
+    calc(2 * var(--u)) calc(2 * var(--u)) 0 0 var(--ink);
+  transition: none;
+}
+.btn:hover {
+  background: var(--bg-3);
+}
+.btn:active,
+.btn[aria-pressed='true'] {
+  transform: translate(calc(2 * var(--u)), calc(2 * var(--u)));
+  box-shadow:
+    0 calc(-1 * var(--u)) 0 0 var(--line-0),
+    0 var(--u) 0 0 var(--line-0),
+    calc(-1 * var(--u)) 0 0 0 var(--line-0),
+    var(--u) 0 0 0 var(--line-0),
+    inset var(--u) var(--u) 0 0 var(--ink),
+    inset calc(-1 * var(--u)) calc(-1 * var(--u)) 0 0 var(--line-1);
+}
+.btn[aria-pressed='true'],
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.btn-primary:hover {
+  background: var(--accent-light);
+}
+.btn:disabled {
+  color: var(--line-1);
+  background: var(--bg-1);
+  transform: none;
+  box-shadow: 0 0 0 var(--u) var(--line-0);
+  cursor: default;
+}
+
+.panel {
+  background: var(--bg-1);
+  padding: var(--sp-4);
+  margin: var(--sp-2);
+  box-shadow:
+    0 calc(-1 * var(--u)) 0 0 var(--line-0),
+    0 var(--u) 0 0 var(--line-0),
+    calc(-1 * var(--u)) 0 0 0 var(--line-0),
+    var(--u) 0 0 0 var(--line-0),
+    inset var(--u) var(--u) 0 0 var(--line-1),
+    inset calc(-1 * var(--u)) calc(-1 * var(--u)) 0 0 var(--ink);
+}

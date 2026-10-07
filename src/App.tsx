@@ -8,6 +8,9 @@ import { TitlePlaceholder } from '@/ui/screens/TitlePlaceholder'
 const DevTokensScreen = import.meta.env.DEV
   ? lazy(() => import('@/ui/screens/DevTokensScreen'))
   : null
+const DevGalleryScreen = import.meta.env.DEV
+  ? lazy(() => import('@/ui/screens/DevGalleryScreen'))
+  : null
 
 export default function App() {
   const screen = useStore((s) => s.screen)
@@ -34,14 +37,16 @@ export default function App() {
   switch (screen.kind) {
     case 'boot':
       return <BootScreen onReady={onBootReady} />
-    case 'dev':
-      return DevTokensScreen ? (
+    case 'dev': {
+      const Dev = screen.page === 'gallery' ? DevGalleryScreen : DevTokensScreen
+      return Dev ? (
         <Suspense fallback={null}>
-          <DevTokensScreen />
+          <Dev />
         </Suspense>
       ) : (
         <TitlePlaceholder />
       )
+    }
     default:
       return <TitlePlaceholder />
   }

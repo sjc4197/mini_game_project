@@ -32,3 +32,10 @@
 .devLink:hover {
   color: var(--text-0);
 }
+
+.devLinks {
+  display: flex;
+  gap: var(--sp-8);
+  flex-wrap: wrap;
+  justify-content: center;
+}
