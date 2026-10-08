@@ -5,6 +5,7 @@ import { useStore } from '@/app/store'
 import { routerReducer } from './router'
 import { Curtain } from './ScreenTransition'
 import { BootScreen } from './screens/BootScreen'
+import { CharacterSelectScreen } from './screens/CharacterSelectScreen'
 import { PlaceholderScreen } from './screens/PlaceholderScreen'
 import { TitleScreen } from './screens/TitleScreen'
 
@@ -27,7 +28,7 @@ function ScreenView({ screen }: { screen: Screen }) {
     case 'title':
       return <TitleScreen />
     case 'select':
-      return <PlaceholderScreen title="캐릭터 선택" note="5단계에서 구현" />
+      return <CharacterSelectScreen />
     case 'lobby':
       return <PlaceholderScreen title="로비" note="6단계에서 구현" />
     case 'game':

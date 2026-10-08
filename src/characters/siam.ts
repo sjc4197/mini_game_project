@@ -7,7 +7,7 @@ import type { CharacterDef } from './types'
 export const siam: CharacterDef = {
   id: 'siam',
   name: '샴',
-  bio: '달빛 아래서만 깨어 있는 도도한 샴, 칭찬은 하루 한 번',
+  bio: '달빛 아래서만 깨어 있는 도도한 샴',
   personality: '도도한 츤데레, 늘 졸림',
   specialty: '낮잠',
   accent: ACCENTS.siam,
