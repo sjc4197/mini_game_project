@@ -11,15 +11,7 @@ import {
   squash,
   validateSprite,
 } from './compose'
-import { NEUTRAL_ACCENT, PALETTE } from './palette'
-import {
-  SAMPLE_BODY,
-  SAMPLE_FACE_IDLE,
-  SAMPLE_FACE_WORRIED,
-  SAMPLE_SWEAT,
-  buildSampleClips,
-  sampleCharFor,
-} from './samples'
+import { PALETTE } from './palette'
 import type { SpriteDef } from './types'
 
 const accent = { base: '#FF5E5B', dark: '#C13B49', light: '#FF9E8A' }
@@ -38,10 +30,6 @@ const charFor = (hex: string): string =>
 describe('validateSprite', () => {
   it('정상 스프라이트는 빈 배열', () => {
     expect(validateSprite(DOT)).toEqual([])
-    expect(validateSprite(SAMPLE_BODY)).toEqual([])
-    expect(validateSprite(SAMPLE_FACE_IDLE)).toEqual([])
-    expect(validateSprite(SAMPLE_FACE_WORRIED)).toEqual([])
-    expect(validateSprite(SAMPLE_SWEAT)).toEqual([])
   })
   it('행 수/행 길이/모르는 키를 잡아낸다', () => {
     expect(validateSprite({ ...DOT, rows: ['a.b'] })).toHaveLength(1)
@@ -137,64 +125,11 @@ describe('squash / shift / bob', () => {
   const base = () => rasterOf(tall, accent)
 
   it('squash: 지정 행이 사라지고 위쪽이 한 칸 내려온다, 아래쪽은 그대로', () => {
-    // rows: a . a a  → row 2 삭제 → 빈행 a . a
     expect(rasterToRows(squash(base(), 2), charFor)).toEqual(['.', 'a', '.', 'a'])
     expect(squash(base(), 2).key).toBe('sprite:tall~squash')
   })
   it('shift/bob: 밖으로 나가면 버린다', () => {
     expect(rasterToRows(shift(base(), 0, 1), charFor)).toEqual(['.', 'a', '.', 'a'])
     expect(rasterToRows(bob(base()), charFor)).toEqual(['.', 'a', 'a', '.'])
-  })
-})
-
-describe('샘플(펑이 초안) 합성', () => {
-  it('몸통 + idle 얼굴 (6,12) 합성 결과가 설계 문서의 24×24 기대 그리드와 같다', () => {
-    const r = compose({
-      key: 'peong-check',
-      w: 24,
-      h: 24,
-      layers: [
-        { sprite: SAMPLE_BODY, at: { x: 0, y: 0 } },
-        { sprite: SAMPLE_FACE_IDLE, at: SAMPLE_BODY.points!.face! },
-      ],
-      accent,
-    })
-    expect(rasterToRows(r, sampleCharFor(accent))).toEqual([
-      '................s.......',
-      '...............sos......',
-      '...............ts.......',
-      '.............tt.........',
-      '............t...........',
-      '..........kkkk..........',
-      '.........kcccck.........',
-      '.........kcccck.........',
-      '.........kkkkkk.........',
-      '.......kkhhrrrrkk.......',
-      '......krhhrrrrrrrk......',
-      '.....krhhrrrrrrrrrk.....',
-      '.....krrwwrrrrwwrrk.....',
-      '....krrwwwwrrwwwwrrk....',
-      '....krrwkkwrrwkkwrdk....',
-      '....krrwkkwrrwkkwrdk....',
-      '....krrrwwrrrrwwrrdk....',
-      '....krrrrrrrrrrrrrdk....',
-      '....krrrrkrrrrkrrrdk....',
-      '.....krrrrkkkkrrddk.....',
-      '.....krrrrrrrrrdddk.....',
-      '......krrrrrrddddk......',
-      '.......kkddddddkk.......',
-      '.........kkkkkk.........',
-    ])
-  })
-  it('클립: 32×32 스테이지, 2프레임, squash 프레임은 발(마지막 행)이 고정이고 불꽃이 1dp 내려온다', () => {
-    const clips = buildSampleClips(NEUTRAL_ACCENT)
-    const [a, b] = clips.idle.frames
-    expect(a!.w).toBe(32)
-    expect(clips.idle.frames).toHaveLength(2)
-    const rowsA = rasterToRows(a!, sampleCharFor(NEUTRAL_ACCENT))
-    const rowsB = rasterToRows(b!, sampleCharFor(NEUTRAL_ACCENT))
-    expect(rowsB[31]).toBe(rowsA[31]) // 발 고정
-    expect(rowsB[9]).toBe(rowsA[8]) // 불꽃(스테이지 8행)이 9행으로
-    expect(clips.worried.frames[0]!.colors).toContain('#6E9BFF') // 땀방울 포함
   })
 })

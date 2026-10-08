@@ -44,10 +44,12 @@
 
 /* 투명 영역이 보이도록 아주 옅은 체커 */
 .stage {
-  background: repeating-conic-gradient(var(--bg-2) 0 25%, var(--bg-1) 0 50%) 0 0 /
-    calc(8 * var(--u)) calc(8 * var(--u));
+  background: var(--bg-3);
   box-shadow: 0 0 0 var(--sp-1) var(--line-0);
   line-height: 0;
+}
+.stageLight {
+  background: #f4f1e8;
 }
 
 .pre {
@@ -58,4 +60,42 @@
   white-space: pre;
   overflow-x: auto;
   margin: 0;
+}
+
+/* 3단계: 캐릭터 × 무드 그리드 */
+.charRow {
+  display: grid;
+  grid-template-columns: calc(70 * var(--u)) repeat(6, auto);
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-2) 0;
+  border-bottom: var(--sp-1) dotted var(--line-0);
+}
+
+.charName {
+  display: grid;
+  gap: var(--sp-1);
+}
+
+.accentChip {
+  display: inline-block;
+  width: var(--sp-6);
+  height: var(--sp-6);
+  vertical-align: middle;
+  margin-right: var(--sp-2);
+  box-shadow: 0 0 0 var(--sp-1) var(--ink);
+}
+
+.moodLabel {
+  text-align: center;
+}
+
+.lines {
+  display: grid;
+  grid-template-columns: calc(60 * var(--u)) 1fr;
+  gap: var(--sp-1) var(--sp-4);
+}
+
+.contents {
+  display: contents;
 }

@@ -57,12 +57,12 @@ export interface Accent {
   light: string
 }
 
-/** 캐릭터 accent 3단 (UI 테마 + 스프라이트 몸통 음영 겸용) */
+/** 캐릭터 accent 3단 (UI 테마색 — 고양이 털색과는 별개로, 각 고양이의 상징색) */
 export const ACCENTS = {
-  peong: { base: '#FF5E5B', dark: '#C13B49', light: '#FF9E8A' },
-  cubo: { base: '#4FD6E8', dark: '#2A93B0', light: '#A8EEF7' },
-  mallang: { base: '#9BE564', dark: '#5EA83E', light: '#D2F7A6' },
-  dalnyang: { base: '#C792EA', dark: '#8A5BBF', light: '#E6C6FA' },
+  cheese: { base: '#FFA94D', dark: '#C2742A', light: '#FFD2A0' },
+  mackerel: { base: '#4FD6E8', dark: '#2A93B0', light: '#A8EEF7' },
+  milk: { base: '#FF8FB1', dark: '#C25A80', light: '#FFC4D6' },
+  siam: { base: '#6E9BFF', dark: '#3F63C2', light: '#B5CBFF' },
 } as const satisfies Record<string, Accent>
 
 export type AccentId = keyof typeof ACCENTS

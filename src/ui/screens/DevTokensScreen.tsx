@@ -21,10 +21,10 @@ const SAMPLE = '도트 아케이드 · 지뢰찾기 · 테트리스 0123456789 A
 const UI_SCALES: UiScale[] = ['auto', 2, 3]
 const ACCENT_IDS = Object.keys(ACCENTS) as AccentId[]
 const ACCENT_LABEL: Record<AccentId, string> = {
-  peong: '펑이',
-  cubo: '큐보',
-  mallang: '말랑이',
-  dalnyang: '달냥',
+  cheese: '치즈',
+  mackerel: '고등어',
+  milk: '우유',
+  siam: '샴',
 }
 
 function readStored(): string {
