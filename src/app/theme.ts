@@ -1,9 +1,9 @@
-import { ACCENTS, NEUTRAL_ACCENT, type Accent } from '@/pixel/palette'
+import type { CharacterDef } from '@/characters/types'
+import { NEUTRAL_ACCENT, type Accent } from '@/pixel/palette'
 import type { Settings } from './store'
 
 /**
  * accent 전파: html 루트의 CSS 변수를 덮어쓴다. 포털 없이 .app 안에 렌더링되므로 전부 상속된다.
- * (캐릭터 정의가 생기는 4단계부터는 CharacterDef.accent 를 넘긴다)
  */
 export function applyAccent(accent: Accent | null): void {
   const style = document.documentElement.style
@@ -18,12 +18,12 @@ export function applyAccent(accent: Accent | null): void {
   style.setProperty('--accent-light', accent.light)
 }
 
-/** 선택 캐릭터 id → accent. 모르는 id 면 중립색 */
-export function applyAccentForCharacter(characterId: string | null): void {
+/** 선택 캐릭터의 상징색을 테마로. null 이면 중립색. (캐릭터 선택 화면의 미리보기도 이 함수로) */
+export function applyCharacterTheme(character: CharacterDef | null | undefined): void {
   const root = document.documentElement
-  if (characterId && characterId in ACCENTS) {
-    root.dataset.char = characterId
-    applyAccent(ACCENTS[characterId as keyof typeof ACCENTS])
+  if (character) {
+    root.dataset.char = character.id
+    applyAccent(character.accent)
   } else {
     delete root.dataset.char
     applyAccent(NEUTRAL_ACCENT)

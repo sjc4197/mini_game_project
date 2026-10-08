@@ -1,0 +1,65 @@
+.screen {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: 1fr auto auto auto 1fr auto;
+  justify-items: center;
+  align-content: center;
+  gap: var(--sp-12);
+  padding: var(--sp-8);
+  cursor: pointer;
+  user-select: none;
+}
+
+.logoBox {
+  grid-row: 2;
+  padding: var(--sp-4) var(--sp-12);
+  background: var(--bg-1);
+  box-shadow:
+    0 calc(-1 * var(--u)) 0 0 var(--accent),
+    0 var(--u) 0 0 var(--accent),
+    calc(-1 * var(--u)) 0 0 0 var(--accent),
+    var(--u) 0 0 0 var(--accent),
+    inset var(--u) var(--u) 0 0 var(--accent-dark),
+    inset calc(-1 * var(--u)) calc(-1 * var(--u)) 0 0 var(--accent-dark),
+    calc(3 * var(--u)) calc(3 * var(--u)) 0 0 var(--ink);
+}
+
+.logo {
+  color: var(--accent);
+  letter-spacing: calc(2 * var(--u));
+  text-shadow:
+    var(--sp-1) var(--sp-1) 0 var(--accent-dark),
+    var(--sp-2) var(--sp-2) 0 var(--ink);
+}
+
+.cats {
+  grid-row: 3;
+  display: flex;
+  gap: var(--sp-6);
+  align-items: flex-end;
+  padding: var(--sp-4) var(--sp-8);
+  background: var(--bg-2);
+  box-shadow: 0 0 0 var(--sp-1) var(--line-0);
+}
+
+.press {
+  grid-row: 4;
+  color: var(--accent-text);
+}
+
+.footer {
+  grid-row: 6;
+  display: flex;
+  gap: var(--sp-8);
+  color: var(--text-1);
+  cursor: default;
+}
+
+.link {
+  color: var(--text-1);
+  text-decoration: underline;
+  text-underline-offset: var(--sp-1);
+}
+.link:hover {
+  color: var(--text-0);
+}

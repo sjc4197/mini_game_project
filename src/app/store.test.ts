@@ -6,6 +6,7 @@ import { useStore } from './store'
 beforeEach(() => {
   useStore.setState({
     screen: { kind: 'boot' },
+    screenFx: 'fade',
     selectedCharacterId: null,
     settings: DEFAULT_SETTINGS,
     records: {},
@@ -20,8 +21,9 @@ describe('useStore', () => {
     expect(s.settings).toEqual(DEFAULT_SETTINGS)
   })
   it('navigate / back', () => {
-    useStore.getState().navigate({ kind: 'settings', from: 'lobby' })
+    useStore.getState().navigate({ kind: 'settings', from: 'lobby' }, 'wipe')
     expect(useStore.getState().screen).toEqual({ kind: 'settings', from: 'lobby' })
+    expect(useStore.getState().screenFx).toBe('wipe')
     useStore.getState().back()
     expect(useStore.getState().screen).toEqual({ kind: 'lobby' })
   })

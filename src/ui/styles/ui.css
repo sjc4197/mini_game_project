@@ -59,3 +59,16 @@
     inset var(--u) var(--u) 0 0 var(--line-1),
     inset calc(-1 * var(--u)) calc(-1 * var(--u)) 0 0 var(--ink);
 }
+
+/* 키보드/마우스 공통 포커스 표시 (MenuList 가 .is-focused 를 관리) */
+.btn.is-focused {
+  outline: calc(2 * var(--u)) solid var(--focus);
+  outline-offset: calc(2 * var(--u));
+}
+.btn[data-nav]:focus {
+  outline: none;
+}
+.btn[data-nav].is-focused:focus-visible {
+  outline: calc(2 * var(--u)) solid var(--focus);
+  outline-offset: calc(2 * var(--u));
+}

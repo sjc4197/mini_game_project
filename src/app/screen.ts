@@ -38,3 +38,6 @@ export function parentOf(s: Screen): Screen {
       return { kind: 'title' }
   }
 }
+
+/** 화면 전환 효과: fade(기본) / wipe(게임 시작) */
+export type ScreenFx = 'fade' | 'wipe'

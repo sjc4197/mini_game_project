@@ -1,8 +1,8 @@
 import { ACCENTS } from '@/pixel/palette'
-import { loafBody } from './loaf'
+import { CHEST, TABBY_STRIPES, catBody, paint } from './template'
 import type { CharacterDef } from './types'
 
-/** 치즈 — 주황 치즈태비. 등과 옆구리, 꼬리에 진한 주황 줄무늬 */
+/** 치즈 — 주황 치즈태비. 이마·옆구리·꼬리 줄무늬, 흰 가슴 */
 export const cheese: CharacterDef = {
   id: 'cheese',
   name: '치즈',
@@ -10,8 +10,20 @@ export const cheese: CharacterDef = {
   personality: '먹보, 느긋함',
   specialty: '낮잠과 간식',
   accent: ACCENTS.cheese,
-  body: loafBody('cheese.body', { k: '$ink', r: '#F89502', d: '#D28405' }),
-  idle: { kind: 'squash', row: 13 },
+  body: catBody(
+    'cheese.body',
+    {
+      k: '$ink',
+      r: '#FFB454',
+      t: '#FFB454',
+      f: '#FFF4E0',
+      d: '#E08A2E',
+      w: '#FFF4E0',
+      p: '#FF9DA6',
+    },
+    (rows) => paint(paint(rows, TABBY_STRIPES), CHEST),
+  ),
+  idle: { kind: 'squash', row: 24 },
   lines: {
     'ui.idle': ['냠… 간식 시간 아직이야?', '햇볕 좋다… 식빵 굽는 중.', '배 만지면 안 돼.'],
     'ui.lobby.hover': ['뭐든 좋아. 간식 걸고 하자.', '빨리 고르면 간식 줄게.'],

@@ -292,15 +292,15 @@ interface GameHost {
 | milk | 우유 | 흰 고양이 | 흰색 `#FBF6EC`, 무늬 없음, 분홍 귀 속 | 수줍음, 다정함 | pink `#FF8FB1` |
 | siam | 샴 | 샴 | 크림 `#F3E3C3` + 초콜릿 포인트(귀·얼굴 타원 마스크·꼬리·발), 파란 눈 | 도도한 츤데레, 늘 졸림 | blue `#6E9BFF` |
 
-- 네 마리가 **같은 식빵 템플릿**(`characters/loaf.ts`, 32×24)을 공유. 템플릿은 **사용자가 준 레퍼런스 픽셀아트(주황 식빵 고양이, 36×24 격자)를 그대로 읽어 들인 것**(10/8, 손으로 그린 시안은 전부 반려됨). 종류별 차이는 팔레트 + `paintRect` 포인트뿐. 새 포즈/캐릭터가 필요하면 레퍼런스 이미지를 먼저 받는다.
-- 얼굴 타일 12×4 공용(레퍼런스의 얼굴 배치 그대로: 눈 1픽셀 둘, ω 입 3픽셀, 볼 1픽셀). 샴만 눈을 파란색, 입을 크림색으로 재색상.
+- 네 마리가 **같은 오리지널 템플릿**(`characters/template.ts`, 32×32, 앉은 정면 뚱냥이)을 공유. 레퍼런스에서 추출했던 식빵 템플릿은 저작권 문제로 폐기(10/8)하고, 머리 타원 + 몸 타원(허리) + 귀 + 앞발 + 곡선 꼬리를 수식으로 생성해 외곽선을 자동 계산하는 생성기(scratchpad sit-apply.cjs)로 교체. 종류별 차이는 팔레트 + 줄무늬/가슴 패치(paint) + 포인트(paintRect)뿐.
+- 얼굴 타일 16×6 공용(점 눈 2×2 둘, ω 입 5픽셀, 볼터치). 샴만 눈을 파란색, 입을 크림색으로 재색상.
 - 털색은 accent 와 별개(리얼한 고양이 색). accent 는 UI 테마용 상징색.
 
 대사표 `lines: Partial<Record<MascotEvent | 'lobby:<gameId>' | 'lobby:locked', string[]>>`, 이벤트당 3~4개, 마지막 2개 제외 무작위. 조회 순서: 게임별 오버라이드 → 캐릭터 → `DEFAULT_LINES`. 모든 대사 ≤24자(말풍선 2줄) 테스트.
 
 ### 3.3 스프라이트 파이프라인 (형식은 부록 D)
-- **식빵 고양이 32×24(내용 21행), 합성 스테이지 32×32**(몸통은 (0,10)에 배치 → 위 10dp가 반짝이/생각 점 공간).
-- **레이어**: ① 몸통 base(캐릭터별 1장, 얼굴 없음, `$base/$dark/$light` 팔레트 참조) ② 공용 얼굴 타일 12×4 ×7(idle/happy/worried/sad/win/think/blink, `points.face`에 배치; 큐보 LED 눈 등은 `faces` 오버라이드) ③ 부속 sweat 4×6 / sparkle 5×5 ×2 / dots 7×3 ×3 / 발 그림자 12×2(알파 HEX) ④ 무드별 조합·클립: idle 2f 2fps(+blink) · happy 2f 4fps · worried 2f 3fps(+sweat) · sad 2f 1fps · win 2f 4fps(+sparkle 교대) · think 3f 2fps(+dots).
+- **앉은 고양이 32×32, 합성 스테이지 32×36**(몸통은 (0,4)에 배치 → 위 4dp가 반짝이/생각 점 공간).
+- **레이어**: ① 몸통 base(캐릭터별 1장, 얼굴 없음, `$base/$dark/$light` 팔레트 참조) ② 공용 얼굴 타일 16×6 ×7(idle/happy/worried/sad/win/think/blink, `points.face`에 배치; 큐보 LED 눈 등은 `faces` 오버라이드) ③ 부속 sweat 4×6 / sparkle 5×5 ×2 / dots 7×3 ×3 / 발 그림자 12×2(알파 HEX) ④ 무드별 조합·클립: idle 2f 2fps(+blink) · happy 2f 4fps · worried 2f 3fps(+sweat) · sad 2f 1fps · win 2f 4fps(+sparkle 교대) · think 3f 2fps(+dots).
 - **idle 프레임 B는 재작화 없이 변환**: `squash(row)` = 지정 행 삭제 + 맨 위 빈 행 삽입(발 고정, 머리 1dp 하강 = 숨쉬기) / `bob` = 전체 1dp 상승(호버 로봇).
 - **compose → Raster(Uint8Array 인덱스 버퍼)** 로 레이어 간 팔레트 키 충돌 없음. 캐시 키 `char:mood:frame`(48개, 각 1KB). `validateSprite`로 행 길이·팔레트 키 테스트.
 - 표시 배율: 기록표/카드 아이콘 1u(몸통 크롭), 로비·게임 마스코트·타이틀 2u(128px), 선택 프리뷰 3u(192px). 타이틀 4마리는 위상 250ms씩 어긋남.

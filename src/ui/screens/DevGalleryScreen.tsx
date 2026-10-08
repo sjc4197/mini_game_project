@@ -99,8 +99,8 @@ export default function DevGalleryScreen() {
       <section className={styles.section}>
         <h2 className={`t-h2 ${styles.sectionTitle}`}>전체 보기 — 4캐릭터 × 6무드 (2u, 애니)</h2>
         <div className={`t-small ${styles.muted}`}>
-          --u {m.u}px · DPR {m.dpr} · 1dp = {m.uDevice} device px · 귀여움 기준(푸신풍): 통통한 한
-          덩어리, 아주 작은 점 눈, 볼터치, 작은 입, 짧은 발·귀·꼬리, 숨쉬기/깜빡임
+          --u {m.u}px · DPR {m.dpr} · 1dp = {m.uDevice} device px · 오리지널 앉은 뚱냥이 템플릿:
+          둥근 머리·허리 들어간 몸, 점 눈·ω 입·볼터치, 앞발 둘, 말린 꼬리, 숨쉬기/깜빡임
         </div>
         <div className={styles.charRow}>
           <div />

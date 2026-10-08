@@ -1,9 +1,9 @@
 import { ACCENTS } from '@/pixel/palette'
 import { recolorFaces } from './faces'
-import { loafBody, paintRect } from './loaf'
+import { catBody, paintRect } from './template'
 import type { CharacterDef } from './types'
 
-/** 샴 — 크림색 몸에 초콜릿 포인트(귀·얼굴 마스크·꼬리·발은 팔레트로), 파란 눈 */
+/** 샴 — 크림색 몸에 초콜릿 포인트(귀·얼굴 마스크·꼬리·앞발), 파란 눈 */
 export const siam: CharacterDef = {
   id: 'siam',
   name: '샴',
@@ -11,14 +11,18 @@ export const siam: CharacterDef = {
   personality: '도도한 츤데레, 늘 졸림',
   specialty: '낮잠',
   accent: ACCENTS.siam,
-  body: loafBody('siam.body', { k: '$ink', r: '#F3E3C3', d: '#8C6A52', m: '#6B4A3A' }, (rows) => {
-    let r = paintRect(rows, 5, 1, 15, 4, 'r', 'm') // 귀
-    r = paintRect(r, 6, 6, 15, 9, 'r', 'm') // 얼굴 마스크
-    r = paintRect(r, 24, 4, 27, 11, 'r', 'm') // 꼬리
-    r = paintRect(r, 5, 20, 22, 20, 'r', 'm') // 발
-    return r
-  }),
-  idle: { kind: 'squash', row: 13 },
+  body: catBody(
+    'siam.body',
+    { k: '$ink', r: '#F3E3C3', t: '#6B4A3A', f: '#6B4A3A', m: '#6B4A3A', p: '#6B4A3A' },
+    (rows) => {
+      let r = paintRect(rows, 6, 2, 25, 6, 'r', 'm') // 귀
+      r = paintRect(r, 10, 11, 21, 11, 'r', 'm') // 얼굴 마스크 (타원)
+      r = paintRect(r, 9, 12, 22, 14, 'r', 'm')
+      r = paintRect(r, 10, 15, 21, 15, 'r', 'm')
+      return r
+    },
+  ),
+  idle: { kind: 'squash', row: 24 },
   faces: recolorFaces('siam', { e: '#6E9BFF', k: '#F3E3C3' }),
   lines: {
     'ui.idle': ['…냐암. (하품)', '날 깨운 건 너냐옹?', '달이 뜨면 깨울 것.'],

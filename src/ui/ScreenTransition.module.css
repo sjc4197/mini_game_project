@@ -1,0 +1,71 @@
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--ink);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 전환 중에는 클릭을 막는다 */
+.closing,
+.opening {
+  pointer-events: auto;
+}
+
+.fade.closing {
+  animation: fadeIn 180ms steps(4, end) forwards;
+}
+.fade.opening {
+  animation: fadeOut 180ms steps(4, end) forwards;
+}
+
+.wipe.closing {
+  opacity: 1;
+  clip-path: inset(0 100% 0 0);
+  animation: wipeIn 240ms steps(8, end) forwards;
+}
+.wipe.opening {
+  opacity: 1;
+  clip-path: inset(0);
+  animation: wipeOut 240ms steps(8, end) forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes wipeIn {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+@keyframes wipeOut {
+  from {
+    clip-path: inset(0);
+  }
+  to {
+    clip-path: inset(0 0 0 100%);
+  }
+}
+
+/* 움직임 줄이기: none 이 아니라 1ms — animationend 가 반드시 발생해야 전환이 끝난다 */
+html[data-motion='reduce'] .closing,
+html[data-motion='reduce'] .opening {
+  animation-duration: 1ms;
+}

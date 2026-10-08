@@ -1,0 +1,12 @@
+.screen {
+  min-height: 100dvh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--sp-8);
+  padding: var(--sp-8);
+}
+
+.note {
+  color: var(--text-1);
+}

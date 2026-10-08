@@ -9,7 +9,7 @@ import {
   safeStorage,
   sanitizePersisted,
 } from './persist'
-import { parentOf, type Screen } from './screen'
+import { parentOf, type Screen, type ScreenFx } from './screen'
 
 export type UiScale = 'auto' | 2 | 3
 export type Chatter = 'quiet' | 'normal' | 'chatty'
@@ -61,7 +61,9 @@ export interface PersistedState {
 export interface AppState extends PersistedState {
   /** 비영속 — 새로고침하면 항상 boot → title */
   screen: Screen
-  navigate(to: Screen): void
+  /** 다음 전환에 쓸 커튼 효과 (비영속) */
+  screenFx: ScreenFx
+  navigate(to: Screen, fx?: ScreenFx): void
   back(): void
   selectCharacter(id: string | null): void
   updateSettings(patch: Partial<Settings>): void
@@ -75,9 +77,10 @@ export const useStore = create<AppState>()(
       (set, get) => ({
         ...DEFAULT_PERSISTED,
         screen: { kind: 'boot' },
+        screenFx: 'fade',
 
-        navigate: (to) => set({ screen: to }),
-        back: () => set({ screen: parentOf(get().screen) }),
+        navigate: (to, fx = 'fade') => set({ screen: to, screenFx: fx }),
+        back: () => set({ screen: parentOf(get().screen), screenFx: 'fade' }),
         selectCharacter: (id) => set({ selectedCharacterId: id }),
         updateSettings: (patch) =>
           set((s) => ({

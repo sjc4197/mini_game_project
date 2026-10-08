@@ -1,8 +1,8 @@
 import { ACCENTS } from '@/pixel/palette'
-import { loafBody } from './loaf'
+import { CHEST, TABBY_STRIPES, catBody, paint } from './template'
 import type { CharacterDef } from './types'
 
-/** 고등어 — 회청색 고등어태비. 줄무늬가 더 많고 진하다 */
+/** 고등어 — 회청색 고등어태비. 짙은 줄무늬, 흰 가슴 */
 export const mackerel: CharacterDef = {
   id: 'mackerel',
   name: '고등어',
@@ -10,8 +10,20 @@ export const mackerel: CharacterDef = {
   personality: '활발함, 장난꾸러기',
   specialty: '우다다',
   accent: ACCENTS.mackerel,
-  body: loafBody('mackerel.body', { k: '$ink', r: '#A9BBD3', d: '#5F7294' }),
-  idle: { kind: 'squash', row: 13 },
+  body: catBody(
+    'mackerel.body',
+    {
+      k: '$ink',
+      r: '#A9BBD3',
+      t: '#A9BBD3',
+      f: '#F2F5FA',
+      d: '#5F7294',
+      w: '#F2F5FA',
+      p: '#FF9DA6',
+    },
+    (rows) => paint(paint(rows, TABBY_STRIPES), CHEST),
+  ),
+  idle: { kind: 'squash', row: 24 },
   lines: {
     'ui.idle': ['놀자! 뭐든 좋아!', '꼬리 잡기 할 사람!', '후다닥! …아무것도 아냐.'],
     'ui.lobby.hover': ['빨리빨리! 뭐 할 거야?', '다 재밌어 보여!'],

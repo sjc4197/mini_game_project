@@ -4,8 +4,8 @@ import { DOTS, SPARKLE_A, SPARKLE_B, SWEAT } from './extras'
 import { FACES } from './faces'
 import type { CharacterDef, FaceKey } from './types'
 
-/** 식빵 고양이 32×24(실제 내용 20행)가 놓이는 32×32 스테이지 — 위 11dp 가 반짝이/생각 점 공간 */
-export const STAGE = { w: 32, h: 32, bodyAt: { x: 0, y: 10 } as Point } as const
+/** 앉은 고양이 32×32 가 놓이는 32×36 스테이지 — 위 4dp 가 반짝이/생각 점 공간 */
+export const STAGE = { w: 32, h: 36, bodyAt: { x: 0, y: 4 } as Point } as const
 
 export function faceOf(c: CharacterDef, key: FaceKey): SpriteDef {
   return c.faces?.[key] ?? FACES[key]

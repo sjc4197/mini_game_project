@@ -24,19 +24,19 @@ describe('스프라이트 정의 검증', () => {
     '%s: 몸통 24×24, 오버라이드 얼굴, 기준점',
     (_id, c) => {
       expect(c.body.w).toBe(32)
-      expect(c.body.h).toBe(24)
+      expect(c.body.h).toBe(32)
       expect(validateSprite(c.body)).toEqual([])
       for (const [key, face] of Object.entries(c.faces ?? {})) {
         expect(validateSprite(face!), `${c.id} face ${key}`).toEqual([])
-        expect([face!.w, face!.h]).toEqual([12, 4])
+        expect([face!.w, face!.h]).toEqual([16, 6])
       }
       for (const p of ['face', 'side', 'head', 'think'] as const)
         expect(c.body.points[p]).toBeDefined()
       // 얼굴 타일이 몸통 안에 들어가야 한다
       const f = c.body.points.face
       expect(f.x).toBeGreaterThanOrEqual(0)
-      expect(f.x + 12).toBeLessThanOrEqual(32)
-      expect(f.y + 4).toBeLessThanOrEqual(24)
+      expect(f.x + 16).toBeLessThanOrEqual(32)
+      expect(f.y + 6).toBeLessThanOrEqual(32)
     },
   )
 })
@@ -50,7 +50,7 @@ describe('클립 합성', () => {
         const clip = clips[mood]
         expect(clip.frames.length, mood).toBeGreaterThanOrEqual(2)
         for (const f of clip.frames) {
-          expect([f.w, f.h]).toEqual([32, 32])
+          expect([f.w, f.h]).toEqual([32, 36])
           expect(f.colors.length).toBeGreaterThan(2)
         }
       }
@@ -63,8 +63,8 @@ describe('클립 합성', () => {
     const frames = buildCharacterClips(getCharacter('cheese')).idle.frames
     const row = (r: (typeof frames)[number], y: number) =>
       Array.from(r.data.subarray(y * 32, y * 32 + 32))
-    expect(row(frames[1]!, 30)).toEqual(row(frames[0]!, 30))
-    expect(row(frames[1]!, 12)).toEqual(row(frames[0]!, 11))
+    expect(row(frames[1]!, 35)).toEqual(row(frames[0]!, 35))
+    expect(row(frames[1]!, 7)).toEqual(row(frames[0]!, 6))
   })
   it('털색은 캐릭터마다 다르고 외곽선(잉크)은 공통', () => {
     const fills = new Set<string>()

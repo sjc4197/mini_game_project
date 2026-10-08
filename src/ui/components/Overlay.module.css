@@ -1,0 +1,23 @@
+.dim {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: grid;
+  place-items: center;
+  background: var(--dim);
+  padding: var(--sp-8);
+}
+
+.box {
+  min-width: min(100%, calc(140 * var(--u)));
+  display: grid;
+  gap: var(--sp-6);
+  justify-items: center;
+  background: var(--bg-1);
+  padding: var(--sp-8);
+}
+
+.title {
+  text-align: center;
+  color: var(--accent-text);
+}

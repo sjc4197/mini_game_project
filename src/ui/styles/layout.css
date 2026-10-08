@@ -1,0 +1,21 @@
+/* 화면 공통 레이아웃 유틸 */
+.screen-center {
+  min-height: 100dvh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--sp-8);
+  padding: var(--sp-8);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.stack {
+  display: grid;
+  gap: var(--sp-4);
+}

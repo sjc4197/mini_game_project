@@ -1,0 +1,53 @@
+.menu {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--sp-2);
+  padding-left: calc(12 * var(--u)); /* ▶ 커서 자리 */
+}
+
+.horizontal {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding-left: 0;
+}
+
+.item {
+  position: relative;
+}
+
+.item > :global(.btn) {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-6);
+}
+
+.horizontal .item > :global(.btn) {
+  width: auto;
+}
+
+/* 포커스된 항목 왼쪽에 깜빡이는 ▶ 커서 */
+.item > :global(.btn.is-focused)::before {
+  content: '';
+  position: absolute;
+  left: calc(-12 * var(--u));
+  top: 50%;
+  width: calc(8 * var(--u));
+  height: calc(8 * var(--u));
+  margin-top: calc(-4 * var(--u));
+  background: var(--cursor-img) 0 0 / 100% 100% no-repeat;
+  image-rendering: pixelated;
+  animation: px-blink 600ms step-end infinite;
+}
+
+.horizontal .item > :global(.btn.is-focused)::before {
+  display: none;
+}
+
+.hint {
+  color: var(--text-1);
+}
