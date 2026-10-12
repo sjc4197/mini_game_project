@@ -128,6 +128,8 @@ export interface GameHost {
   readonly mascot: MascotApi
   readonly input: InputService
   readonly audio: { play(name: SfxName): void }
+  /** 이 게임·난이도의 현재 최고 기록 값 (없으면 null). 플레이 중 돌파 연출용 */
+  readonly best: number | null
   /** rAF 코얼레싱 — 한 프레임에 여러 번 불러도 한 번만 반영 */
   setHUD(patch: Record<string, string | number>): void
   finish(result: GameResult): void

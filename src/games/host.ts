@@ -57,6 +57,9 @@ export function createHost(o: HostOptions): HostHandle {
     mascot,
     input,
     audio,
+    get best() {
+      return useStore.getState().records[o.module.id]?.[o.difficulty]?.best?.value ?? null
+    },
     setHUD(patch) {
       if (!alive) return
       if (pending) {

@@ -5,9 +5,13 @@ import { mulberry32, randomSeed } from '@/lib/rng'
 import { TETRIS_ICON } from '../icons'
 import type { GameHost, GameInstance, GameInstanceState, GameModule } from '../types'
 import { createGame, start, step } from './logic'
+import { PALETTE } from '@/pixel/palette'
 import { LOGICAL, createTetrisRenderer, type TetrisRenderer, type TetrisView } from './render'
 import {
+  COLS,
+  HIDDEN_ROWS,
   TETRIS_DIFFICULTIES,
+  VISIBLE_ROWS,
   type StepInput,
   type TetrisDifficulty,
   type TetrisEvent,
@@ -16,11 +20,18 @@ import {
 
 /** 게임오버 회색 덮임 시간 → 그 뒤 결과창 */
 const OVER_MS = 800
+/** 스택 높이 비율: 이 이상이면 '조심…', 이 이하로 내려오면 '휴…' */
+const RISKY_RATIO = 0.7
+const SAFE_RATIO = 0.4
+/** 무입력 '음…' */
+const THINK_IDLE_MS = 10_000
+const FLASH_MS = 400
+const ROWS_TOTAL = HIDDEN_ROWS + VISIBLE_ROWS
 
 class TetrisInstance implements GameInstance {
   state: GameInstanceState = 'created'
   game: TetrisState
-  readonly view: TetrisView = { overT: -1 }
+  readonly view: TetrisView = { overT: -1, now: 0, flashUntil: 0, flashColor: PALETTE.yellow }
   private readonly host: GameHost
   private readonly difficulty: TetrisDifficulty
   private readonly loop: Loop
@@ -28,6 +39,10 @@ class TetrisInstance implements GameInstance {
   private renderer: TetrisRenderer | null = null
   private overTimer = -1
   private lastSecond = -1
+  private clock = 0
+  private idleMs = 0
+  private risky = false
+  private recordFired = false
 
   constructor(host: GameHost, difficulty: TetrisDifficulty) {
     this.host = host
@@ -124,6 +139,7 @@ class TetrisInstance implements GameInstance {
           break
         case 'lock':
           audio.play('lock')
+          this.checkStack()
           break
         case 'hold':
           audio.play('select')
@@ -133,6 +149,7 @@ class TetrisInstance implements GameInstance {
           break
         case 'clear':
           audio.play(e.tetris ? 'tetris' : 'clear')
+          if (e.tetris) this.flash(PALETTE.yellow)
           if (e.tetris) mascot.react('game.great', { line: e.b2b ? '연속 테트리스!' : '테트리스!' })
           else if (e.lines === 3) mascot.react('game.great')
           else if (e.combo >= 3) mascot.react('game.good', { line: `${e.combo} 콤보!` })
@@ -141,6 +158,7 @@ class TetrisInstance implements GameInstance {
           break
         case 'levelup':
           audio.play('levelup')
+          this.flash(PALETTE.lime)
           mascot.react('game.good', { line: `레벨 ${e.level}!`, priority: 2 })
           hud = true
           break
@@ -155,6 +173,45 @@ class TetrisInstance implements GameInstance {
       }
     }
     if (hud) this.pushHud()
+    this.checkRecord()
+  }
+
+  private flash(color: string): void {
+    this.view.flashColor = color
+    this.view.flashUntil = this.clock + FLASH_MS
+  }
+
+  /** 플레이 중 최고점을 넘는 순간 한 번 */
+  private checkRecord(): void {
+    if (this.recordFired) return
+    const best = this.host.best
+    if (best !== null && this.game.score > best) {
+      this.recordFired = true
+      this.host.mascot.react('game.record')
+    }
+  }
+
+  /** 스택 높이(보이는 행 기준) 로 risky/safe */
+  private checkStack(): void {
+    const b = this.game.board
+    let top = ROWS_TOTAL
+    for (let y = HIDDEN_ROWS; y < ROWS_TOTAL && top === ROWS_TOTAL; y++) {
+      for (let x = 0; x < COLS; x++) {
+        if (b[y * COLS + x]) {
+          top = y
+          break
+        }
+      }
+    }
+    const height = ROWS_TOTAL - top
+    const ratio = height / VISIBLE_ROWS
+    if (!this.risky && ratio >= RISKY_RATIO) {
+      this.risky = true
+      this.host.mascot.react('game.risky')
+    } else if (this.risky && ratio <= SAFE_RATIO) {
+      this.risky = false
+      this.host.mascot.react('game.safe')
+    }
   }
 
   private pushHud(): void {
@@ -172,6 +229,10 @@ class TetrisInstance implements GameInstance {
     this.game = this.newGame()
     this.overTimer = -1
     this.view.overT = -1
+    this.view.flashUntil = 0
+    this.idleMs = 0
+    this.risky = false
+    this.recordFired = false
     this.host.mascot.clear()
     this.host.audio.play('back')
     this.apply(start(this.game))
@@ -185,6 +246,8 @@ class TetrisInstance implements GameInstance {
       this.restart()
       return
     }
+    this.clock += dt
+    this.view.now = this.clock
     const g = this.game
     if (g.phase === 'over') {
       if (this.overTimer >= 0) {
@@ -211,7 +274,14 @@ class TetrisInstance implements GameInstance {
       }
       return
     }
-    this.apply(step(g, dt, this.readInput()))
+    const inp = this.readInput()
+    const active = inp.left || inp.right || inp.soft || inp.rotateCw || inp.rotateCcw || inp.hardDrop || inp.hold
+    this.idleMs = active ? 0 : this.idleMs + dt
+    if (this.idleMs >= THINK_IDLE_MS) {
+      this.idleMs = 0
+      this.host.mascot.react('game.think')
+    }
+    this.apply(step(g, dt, inp))
     if (Math.floor(g.elapsedMs / 1000) !== this.lastSecond) this.pushHud()
   }
 

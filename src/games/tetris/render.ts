@@ -95,6 +95,11 @@ function makeGhost(t: Tone): HTMLCanvasElement {
 export interface TetrisView {
   /** 게임오버 회색 덮임 진행 0..1, 음수면 없음 */
   overT: number
+  /** 현재 시각(ms) */
+  now: number
+  /** 보드 테두리 플래시 종료 시각 (테트리스/레벨업) */
+  flashUntil: number
+  flashColor: string
 }
 
 export interface TetrisRenderer {
@@ -177,11 +182,13 @@ export function createTetrisRenderer(): TetrisRenderer {
       ctx.fillStyle = PALETTE['bg-1']
       for (let x = 1; x < COLS; x++) ctx.fillRect(BOARD_X + x * CELL - 1, BOARD_Y, 1, VISIBLE_ROWS * CELL)
       for (let y = 1; y < VISIBLE_ROWS; y++) ctx.fillRect(BOARD_X, BOARD_Y + y * CELL - 1, COLS * CELL, 1)
-      ctx.fillStyle = PALETTE['line-0']
-      ctx.fillRect(BOARD_X - 1, BOARD_Y - 1, COLS * CELL + 2, 1)
-      ctx.fillRect(BOARD_X - 1, BOARD_Y + VISIBLE_ROWS * CELL, COLS * CELL + 2, 1)
-      ctx.fillRect(BOARD_X - 1, BOARD_Y - 1, 1, VISIBLE_ROWS * CELL + 2)
-      ctx.fillRect(BOARD_X + COLS * CELL, BOARD_Y - 1, 1, VISIBLE_ROWS * CELL + 2)
+      const flashing = view.flashUntil > view.now && Math.floor((view.flashUntil - view.now) / 50) % 2 === 0
+      const border = flashing ? 2 : 1
+      ctx.fillStyle = flashing ? view.flashColor : PALETTE['line-0']
+      ctx.fillRect(BOARD_X - border, BOARD_Y - border, COLS * CELL + border * 2, border)
+      ctx.fillRect(BOARD_X - border, BOARD_Y + VISIBLE_ROWS * CELL, COLS * CELL + border * 2, border)
+      ctx.fillRect(BOARD_X - border, BOARD_Y - border, border, VISIBLE_ROWS * CELL + border * 2)
+      ctx.fillRect(BOARD_X + COLS * CELL, BOARD_Y - border, border, VISIBLE_ROWS * CELL + border * 2)
 
       // 클리어 연출 상태
       const clearing = s.clearing
