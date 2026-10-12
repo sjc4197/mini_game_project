@@ -1,6 +1,7 @@
 import { audio } from '@/app/audio/audio'
 import { input } from '@/app/input/input'
 import { createMascotReactor, type MascotReactor } from '@/app/mascot'
+import { mergeResult } from '@/app/records'
 import { useSession } from '@/app/session'
 import { useStore } from '@/app/store'
 import type { CharacterDef } from '@/characters/types'
@@ -72,7 +73,18 @@ export function createHost(o: HostOptions): HostHandle {
     finish(result) {
       if (!alive || finished) return
       finished = true
-      useSession.getState().finish({ ...result, id: `${o.module.id}:${Date.now()}` })
+      const now = Date.now()
+      const store = useStore.getState()
+      const prev = store.records[o.module.id]?.[o.difficulty]
+      const { entry, isRecord } = mergeResult(prev, result, o.module.scoring, o.character.id, now)
+      store.setRecord(o.module.id, o.difficulty, entry)
+      useSession
+        .getState()
+        .finish({ ...result, id: `${o.module.id}:${now}`, isRecord, best: entry.best })
+      if (isRecord) {
+        mascot.react('game.record')
+        audio.play('levelup')
+      }
       o.onFinish?.(result)
     },
     requestPause() {

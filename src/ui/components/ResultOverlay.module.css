@@ -11,6 +11,17 @@
   gap: var(--sp-1);
 }
 
+.record {
+  color: var(--success);
+}
+
+.meta {
+  display: grid;
+  justify-items: center;
+  gap: var(--sp-1);
+  color: var(--text-1);
+}
+
 .muted {
   color: var(--text-1);
 }

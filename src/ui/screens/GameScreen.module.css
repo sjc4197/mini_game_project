@@ -44,6 +44,11 @@
   width: calc(110 * var(--u));
 }
 
+.record {
+  display: block;
+  color: var(--success);
+}
+
 .foot {
   grid-area: foot;
   text-align: center;

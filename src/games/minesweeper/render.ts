@@ -11,7 +11,15 @@ export interface ViewState {
   cursorVisible: boolean
   /** 누르는 중인 셀들 (코드면 3×3) */
   pressed: ReadonlySet<number>
+  /** 셀별 연쇄 플래시 종료 시각(ms, now 기준). 0 = 없음 */
+  flashUntil: Float64Array
+  /** 현재 시각(ms) — 플래시/폭발 깜빡임 계산용 */
+  now: number
+  /** 폭발 깜빡임 위상 (0 = 안 함) */
+  boomPhase: number
 }
+
+export const FLASH_MS = 220
 
 export const logicalSize = (cols: number, rows: number) => ({
   w: cols * CELL_SIZE + BORDER * 2,
@@ -21,6 +29,7 @@ export const logicalSize = (cols: number, rows: number) => ({
 /**
  * 전체 다시 그리기 (dirty 일 때만 호출). 480칸 × 사각형 몇 개라 충분히 싸다.
  * 안 열린 셀: --bg-3 볼록 베벨 / 열린 셀: --bg-1 평면 / 숫자: 5×7 스프라이트 / 지뢰·깃발·X 스프라이트.
+ * 방금 열린 셀은 FLASH_MS 동안 밝게, 밟은 지뢰는 빨강/주황으로 깜빡인다.
  */
 export function drawBoard(
   ctx: CanvasRenderingContext2D,
@@ -49,7 +58,7 @@ export function drawBoard(
       } else {
         // 열린 칸 / 눌린 칸 / 틀린 깃발
         const exploded = i === b.exploded
-        drawFlat(ctx, px, py, exploded)
+        drawFlat(ctx, px, py, exploded ? (v.boomPhase % 2 === 1 ? 'orange' : 'red') : 'flat')
         if (st === CELL.WrongFlag) {
           ctx.drawImage(s.mine, px + 4, py + 4)
           ctx.drawImage(s.cross, px + 4, py + 4)
@@ -58,6 +67,12 @@ export function drawBoard(
         } else if (st === CELL.Revealed) {
           const n = b.counts[i]!
           if (n > 0) ctx.drawImage(s.digits[n - 1]!, px + 6, py + 5)
+          const until = v.flashUntil[i]!
+          if (until > v.now) {
+            const a = ((until - v.now) / FLASH_MS) * 0.35
+            ctx.fillStyle = `rgba(244, 241, 232, ${a.toFixed(3)})`
+            ctx.fillRect(px, py, CELL_SIZE, CELL_SIZE)
+          }
         }
       }
 
@@ -83,8 +98,14 @@ function drawRaised(ctx: CanvasRenderingContext2D, px: number, py: number, hover
   ctx.fillRect(px + CELL_SIZE - 1, py, 1, CELL_SIZE)
 }
 
-function drawFlat(ctx: CanvasRenderingContext2D, px: number, py: number, exploded: boolean): void {
-  ctx.fillStyle = exploded ? PALETTE.red : PALETTE['bg-1']
+function drawFlat(
+  ctx: CanvasRenderingContext2D,
+  px: number,
+  py: number,
+  tone: 'flat' | 'red' | 'orange',
+): void {
+  ctx.fillStyle =
+    tone === 'red' ? PALETTE.red : tone === 'orange' ? PALETTE.orange : PALETTE['bg-1']
   ctx.fillRect(px, py, CELL_SIZE, CELL_SIZE)
   ctx.fillStyle = PALETTE['bg-0']
   ctx.fillRect(px, py + CELL_SIZE - 1, CELL_SIZE, 1)

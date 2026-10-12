@@ -1,13 +1,20 @@
 import { create } from 'zustand'
 import type { GameResult } from '@/games/types'
 import type { Mood } from '@/pixel/types'
+import type { RecordBest } from './store'
 
 /** 게임 한 판 동안만 사는 비영속 상태. HUD/말풍선만 구독하므로 캔버스 컨테이너는 리렌더되지 않는다 */
 export type SessionStatus = 'idle' | 'running' | 'paused' | 'finished'
 
 export type HudValues = Record<string, string | number>
 
-export type SessionResult = GameResult & { id: string }
+export type SessionResult = GameResult & {
+  id: string
+  /** 이번 결과로 best 가 갱신됨 */
+  isRecord: boolean
+  /** 저장 후의 best (없으면 null) */
+  best: RecordBest | null
+}
 
 export interface SessionState {
   status: SessionStatus

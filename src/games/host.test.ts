@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useSession } from '@/app/session'
+import { useStore } from '@/app/store'
 import { cheese } from '@/characters/cheese'
 import { createHost } from './host'
 import type { GameModule } from './types'
@@ -22,6 +23,7 @@ const module: GameModule = {
 describe('createHost', () => {
   beforeEach(() => {
     useSession.getState().reset()
+    useStore.getState().resetRecords()
   })
 
   it('setHUD 는 한 스케줄 안에서 합쳐져 한 번만 세션에 반영된다', () => {
@@ -45,6 +47,24 @@ describe('createHost', () => {
     expect(s.status).toBe('finished')
     expect(s.result?.score).toBe(3)
     expect(s.result?.id).toContain('stub:')
+    expect(s.result?.isRecord).toBe(true)
+    expect(s.result?.best?.value).toBe(3)
+    expect(useStore.getState().records.stub?.d?.plays).toBe(1)
+  })
+
+  it('기록을 못 깨면 isRecord=false, 마스코트는 신기록 때만 game.record', () => {
+    const a = createHost({ module, difficulty: 'd', character: cheese })
+    a.host.finish({ outcome: 'win', score: 10, durationMs: 1 })
+    expect(useSession.getState().mood).toBe('win')
+    a.dispose()
+    useSession.getState().reset()
+    const b = createHost({ module, difficulty: 'd', character: cheese })
+    b.host.finish({ outcome: 'win', score: 5, durationMs: 1 })
+    expect(useSession.getState().result?.isRecord).toBe(false)
+    expect(useSession.getState().result?.best?.value).toBe(10)
+    expect(useSession.getState().mood).toBe('idle')
+    expect(useStore.getState().records.stub?.d?.plays).toBe(2)
+    b.dispose()
   })
 
   it('dispose 뒤에는 HUD/마스코트/일시정지 요청이 전부 무시된다', () => {

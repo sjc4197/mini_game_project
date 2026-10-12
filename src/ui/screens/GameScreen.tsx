@@ -28,6 +28,7 @@ interface Running {
 export function GameScreen({ screen }: { screen: GameScreenState }) {
   const navigate = useStore((s) => s.navigate)
   const selectedId = useStore((s) => s.selectedCharacterId)
+  const records = useStore((s) => s.records)
   const character = getCharacter(selectedId)
   const status = useSession((s) => s.status)
   const hud = useSession((s) => s.hud)
@@ -42,6 +43,7 @@ export function GameScreen({ screen }: { screen: GameScreenState }) {
   const difficulty =
     game?.difficulties.find((d) => d.id === screen.difficulty) ?? game?.difficulties[0]
 
+  const best = game && difficulty ? (records[game.id]?.[difficulty.id]?.best ?? null) : null
   const toLobby = useCallback(() => navigate({ kind: 'lobby' }), [navigate])
   const restart = useCallback(() => setRunId((r) => r + 1), [])
 
@@ -130,7 +132,10 @@ export function GameScreen({ screen }: { screen: GameScreenState }) {
         aria-label={`${game.title} 보드`}
       />
       <MascotPanel character={character} mood={mood} line={line} className={styles.mascot}>
-        <span className="t-small">BEST —</span>
+        <span className="t-small">BEST {best ? game.scoring.format(best.value) : '—'}</span>
+        {result?.isRecord && (
+          <span className={`t-small px-blink ${styles.record}`}>NEW RECORD!</span>
+        )}
       </MascotPanel>
       <footer className={`t-small ${styles.foot}`}>
         {[...game.controls.keyboard, ...(game.controls.mouse ?? [])].join(' · ')}
