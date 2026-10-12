@@ -16,12 +16,14 @@ interface Props {
 export function ResultOverlay({ module, result, onRestart, onLobby }: Props) {
   const win = result.outcome === 'win'
   const timeBased = module.scoring.betterIs === 'lower'
+  const tone = result.tone ?? (win ? 'win' : 'lose')
+  const toneClass = tone === 'win' ? styles.win : tone === 'lose' ? styles.lose : styles.neutral
+  const title = result.title ?? (win ? '★ 클리어! ★' : '게임 오버')
+  const label = result.scoreLabel ?? (win ? '기록' : timeBased ? '시간' : '점수')
   return (
-    <Overlay
-      title={<span className={win ? styles.win : styles.lose}>{win ? '★ 클리어! ★' : '게임 오버'}</span>}
-    >
+    <Overlay title={<span className={toneClass}>{title}</span>}>
       <div className={styles.score}>
-        <span className={`t-small ${styles.muted}`}>{win ? '기록' : timeBased ? '시간' : '점수'}</span>
+        <span className={`t-small ${styles.muted}`}>{label}</span>
         <span className="t-num-l">{module.scoring.format(result.score)}</span>
         {result.isRecord && <span className={`t-h2 px-blink ${styles.record}`}>NEW RECORD!</span>}
       </div>

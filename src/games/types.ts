@@ -16,6 +16,12 @@ export interface GameResult {
   durationMs: number
   /** 결과 화면용 부가 통계 (lines, level, tetrises …) */
   stats?: Record<string, number>
+  /** 결과창 제목 덮어쓰기 (예: 2인 대전 '흑 승리!'). 없으면 outcome 에 따라 클리어/게임 오버 */
+  title?: string
+  /** 제목 색. 없으면 outcome 에 따라 win/lose */
+  tone?: 'win' | 'lose' | 'neutral'
+  /** 점수 라벨 덮어쓰기 (기본: 승리 '기록', 시간 기반 '시간', 그 외 '점수') */
+  scoreLabel?: string
 }
 
 export interface ScoringSpec {
@@ -103,12 +109,7 @@ export interface GameControls {
 }
 
 export type GameInstanceState =
-  | 'created'
-  | 'mounted'
-  | 'running'
-  | 'paused'
-  | 'finished'
-  | 'destroyed'
+  'created' | 'mounted' | 'running' | 'paused' | 'finished' | 'destroyed'
 
 /** 터치 조작 바 항목: 키 버튼(누르는 동안 keydown 주입) 또는 게임 옵션 토글 */
 export type TouchControl =

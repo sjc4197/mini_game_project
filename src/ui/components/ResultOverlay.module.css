@@ -4,6 +4,9 @@
 .lose {
   color: var(--danger);
 }
+.neutral {
+  color: var(--accent-text);
+}
 
 .score {
   display: grid;

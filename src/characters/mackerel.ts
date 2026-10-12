@@ -32,6 +32,8 @@ export const mackerel: CharacterDef = {
     'lobby:locked': ['아직 문이 안 열렸어. 긁어볼까?'],
     'lobby:minesweeper': ['보물찾기 같은 거지? 좋아!', '전부 다 뒤집어 보자!'],
     'lobby:tetris': ['블록 떨어지는 거 잡을래!', '쌓고 무너뜨리고! 최고!'],
+    'lobby:omok': ['오목! 내가 먼저 할래!', '다섯 개 연속! 쉽지?'],
+    'lobby:snake': ['길어지는 거 재밌겠다!', '뱀 꼬리 잡기 놀이다!'],
     'game.start': ['출발! 후다닥!', '준비, 땅!', '가자가자!'],
     'game.good': ['오오! 잘한다!', '그거야 그거!', '신난다!'],
     'game.great': ['우와아! 대박!', '방금 거 뭐야! 멋져!'],

@@ -21,7 +21,7 @@ const stub = (id: string, devOnly = false): GameModule => ({
 describe('lobbyEntries', () => {
   it('모듈이 없으면 예정 게임 + 빈 슬롯으로 LOBBY_SLOTS 칸, 전부 잠김', () => {
     const entries = lobbyEntries([])
-    expect(entries).toHaveLength(LOBBY_SLOTS)
+    expect(entries).toHaveLength(Math.max(LOBBY_SLOTS, UPCOMING.length))
     expect(entries.slice(0, UPCOMING.length).map((e) => e.id)).toEqual(UPCOMING.map((u) => u.id))
     expect(entries.every((e) => e.module === null)).toBe(true)
     expect(entries[0]?.icon).toBeDefined()
@@ -31,15 +31,22 @@ describe('lobbyEntries', () => {
     const tetris = stub('tetris')
     const sample = stub('sample', true)
     const entries = lobbyEntries([sample, tetris])
-    expect(entries.map((e) => e.id)).toEqual(['minesweeper', 'tetris', 'sample', 'soon-3'])
+    const planned = UPCOMING.map((u) => u.id)
+    expect(entries.map((e) => e.id)).toEqual([...planned, 'sample'])
     expect(entries[0]?.module).toBeNull()
-    expect(entries[1]?.module).toBe(tetris)
-    expect(entries[2]?.module).toBe(sample)
-    expect(entries[3]?.module).toBeNull()
+    expect(entries[planned.indexOf('tetris')]?.module).toBe(tetris)
+    expect(entries[planned.indexOf('omok')]?.module).toBeNull()
+    expect(entries[planned.length]?.module).toBe(sample)
+  })
+
+  it('예정 게임이 슬롯보다 적으면 빈 슬롯으로 채운다', () => {
+    const entries = lobbyEntries([], UPCOMING.slice(0, 2))
+    expect(entries).toHaveLength(LOBBY_SLOTS)
+    expect(entries.slice(2).every((e) => e.id.startsWith('soon-') && e.module === null)).toBe(true)
   })
 
   it('모듈이 슬롯보다 많으면 전부 노출', () => {
-    const many = ['minesweeper', 'tetris', 'a', 'b', 'c'].map((id) => stub(id))
-    expect(lobbyEntries(many)).toHaveLength(5)
+    const many = [...UPCOMING.map((u) => u.id), 'a', 'b', 'c'].map((id) => stub(id))
+    expect(lobbyEntries(many)).toHaveLength(UPCOMING.length + 3)
   })
 })

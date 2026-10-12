@@ -16,9 +16,9 @@ export interface OmokMode {
 }
 
 export const OMOK_MODES: readonly OmokMode[] = [
-  { id: 'pvp', label: '2인 대전', description: '한 화면에서 번갈아', ai: null },
-  { id: 'easy', label: '컴퓨터 · 쉬움', description: '내가 흑(선공)', ai: 'easy' },
-  { id: 'hard', label: '컴퓨터 · 어려움', description: '내가 흑(선공)', ai: 'hard' },
+  { id: 'pvp', label: '2인 대전', description: '한 화면에서 번갈아 두기', ai: null },
+  { id: 'easy', label: '컴퓨터 쉬움', description: '내가 흑(선공) · 가볍게', ai: 'easy' },
+  { id: 'hard', label: '컴퓨터 어려움', description: '내가 흑(선공) · 4수 앞을 읽음', ai: 'hard' },
 ]
 
 export interface OmokBoard {

@@ -76,3 +76,63 @@ export const STAR_ICON: SpriteDef = {
     '................',
   ],
 }
+
+/** 오목: 바둑판 선 + 흑백 돌 */
+export const OMOK_ICON: SpriteDef = {
+  id: 'icon.omok',
+  w: 16,
+  h: 16,
+  palette: {
+    b: '#27305A',
+    g: '#4C5A94',
+    k: '$ink',
+    s: '#7C88B8',
+    w: '#F4F1E8',
+    x: '#FFFFFF',
+    t: '#B4BDDC',
+  },
+  rows: [
+    'bkkkbbbgbbbwwwbb',
+    'kskkkbbgbbwwwwwb',
+    'kkkkkgggggwwwwwg',
+    'kkkkkbbgbbwwwtwb',
+    'bkkkbbbgbbbwwwbb',
+    'bbgbbbwwwbbbgbbb',
+    'bbgbbwxwwwbbgbbb',
+    'gggggwwwwwgggggg',
+    'bbgbbwwwtwbbgbbb',
+    'bbgbbbwwwbbbgbbb',
+    'bwwwbbbgbbbkkkbb',
+    'wxwwwbbgbbkskkkb',
+    'wwwwwgggggkkkkkg',
+    'wwwtwbbgbbkkkkkb',
+    'bwwwbbbgbbbkkkbb',
+    'bbgbbbbgbbbbgbbb',
+  ],
+}
+
+/** 스네이크: 꼬불꼬불한 초록 뱀 + 빨간 먹이 */
+export const SNAKE_ICON: SpriteDef = {
+  id: 'icon.snake',
+  w: 16,
+  h: 16,
+  palette: { l: '#9BE564', d: '#5EA83E', k: '$ink', r: '#FF5E5B' },
+  rows: [
+    '................',
+    '..llllllllllll..',
+    '..llllllllllll..',
+    '..dddddddddlld..',
+    '...........lld..',
+    '..llllllllllll..',
+    '..llllllllllll..',
+    '..lldddddddddd..',
+    '..lld...........',
+    '..lllllllllllkl.',
+    '..lllllllllllllr',
+    '..ddddddddddddd.',
+    '................',
+    '......rr........',
+    '......rr........',
+    '................',
+  ],
+}

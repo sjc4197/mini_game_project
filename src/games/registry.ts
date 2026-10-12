@@ -1,12 +1,13 @@
 import type { SpriteDef } from '@/pixel/types'
-import { MINE_ICON, TETRIS_ICON } from './icons'
+import { MINE_ICON, OMOK_ICON, SNAKE_ICON, TETRIS_ICON } from './icons'
 import { minesweeperGame } from './minesweeper'
+import { omokGame } from './omok'
 import { sampleGame } from './sample'
 import { tetrisGame } from './tetris'
 import type { GameModule } from './types'
 
 /** 등록된 게임 모듈. 새 게임 = 폴더 추가 + 여기 1줄 */
-export const GAMES: readonly GameModule[] = [minesweeperGame, tetrisGame, sampleGame]
+export const GAMES: readonly GameModule[] = [minesweeperGame, tetrisGame, omokGame, sampleGame]
 
 export function getGame(id: string): GameModule | undefined {
   return GAMES.find((g) => g.id === id)
@@ -37,6 +38,18 @@ export const UPCOMING: readonly UpcomingGame[] = [
     description: '떨어지는 블록을 쌓아 줄을 지우는 게임',
     icon: TETRIS_ICON,
   },
+  {
+    id: 'omok',
+    title: '오목',
+    description: '같은 돌 다섯 개를 먼저 잇는 게임',
+    icon: OMOK_ICON,
+  },
+  {
+    id: 'snake',
+    title: '스네이크',
+    description: '츄르를 먹고 길어지는 뱀 고양이',
+    icon: SNAKE_ICON,
+  },
 ]
 
 export const LOBBY_SLOTS = 4
@@ -59,8 +72,11 @@ const toEntry = (m: GameModule): LobbyEntry => ({
 })
 
 /** 로비 카드 목록: 예정 순서 → 그 외 등록 모듈 → 빈 슬롯으로 LOBBY_SLOTS 까지 채움 */
-export function lobbyEntries(games: readonly GameModule[] = listGames()): LobbyEntry[] {
-  const entries: LobbyEntry[] = UPCOMING.map((u) => {
+export function lobbyEntries(
+  games: readonly GameModule[] = listGames(),
+  upcoming: readonly UpcomingGame[] = UPCOMING,
+): LobbyEntry[] {
+  const entries: LobbyEntry[] = upcoming.map((u) => {
     const m = games.find((g) => g.id === u.id)
     return m ? toEntry(m) : { ...u, module: null }
   })

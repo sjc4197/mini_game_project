@@ -22,11 +22,11 @@ export const siam: CharacterDef = {
   specialty: '낮잠',
   accent: ACCENTS.siam,
   body: catBody('siam.body', PALETTE, (rows) => {
-      let r = chinShadow(replaceAll(rows, 'd', 'r'))
-      r = paintRect(r, 17, 0, 24, 8, 'r', 'm') // 왼쪽 귀
-      r = paintRect(r, 33, 0, 41, 8, 'r', 'm') // 오른쪽 귀
-      r = paintRect(r, 17, 11, 41, 21, 'rc', 'm') // 얼굴 마스크 (입가까지)
-      r = paintRect(r, 0, 6, 10, 23, 'rc', 'm') // 꼬리
+    let r = chinShadow(replaceAll(rows, 'd', 'r'))
+    r = paintRect(r, 17, 0, 24, 8, 'r', 'm') // 왼쪽 귀
+    r = paintRect(r, 33, 0, 41, 8, 'r', 'm') // 오른쪽 귀
+    r = paintRect(r, 17, 11, 41, 21, 'rc', 'm') // 얼굴 마스크 (입가까지)
+    r = paintRect(r, 0, 6, 10, 23, 'rc', 'm') // 꼬리
     r = paintRect(r, 0, 32, 41, 38, 'rc', 'm') // 네 발
     return r
   }),
@@ -49,6 +49,8 @@ export const siam: CharacterDef = {
     'lobby:locked': ['기다리는 건 질색이다냥.'],
     'lobby:minesweeper': ['지뢰는 밟지 마라냥. 발 아프다냥.', '조용히 집중하라냥.'],
     'lobby:tetris': ['고양이는 높은 곳을 좋아한다냥.', '쌓아 올려 보라냥.'],
+    'lobby:omok': ['수 읽기는 자신 있다냥.', '다섯 줄… 우아하게 두라냥.'],
+    'lobby:snake': ['뱀은 좀 싫다냥… 그래도 해봐.', '꼬리는 소중한 거다냥.'],
     'game.start': ['시작하라냥. 보고 있다냥.', '흠, 어디 한번 해보라냥.', '…졸리지만 봐주겠다냥.'],
     'game.good': ['흥, 제법이냐옹.', '…조금은 봐줄 만하다냥.', '나쁘지 않다냥.'],
     'game.great': ['오… 지금 건 멋졌다냥.', '인정한다냥. 이번만.'],

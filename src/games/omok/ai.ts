@@ -210,6 +210,23 @@ export function evaluate(b: Pick<OmokBoard, 'size' | 'cells'>, toMove: Player): 
   return ctx.score[toMove] - ctx.score[opp]
 }
 
+export interface Analysis {
+  /** 돌별 창 점수 합 [_, 흑, 백] */
+  score: [number, number, number]
+  /** 돌별 완성점(다음 수에 5목이 되는 빈칸) [_, 흑, 백] */
+  fours: [number[], number[], number[]]
+}
+
+/** 현재 보드의 창 점수와 완성점 (연출·마스코트 판단용). 복사본을 돌려준다 */
+export function analyze(b: Pick<OmokBoard, 'size' | 'cells'>): Analysis {
+  const ctx = ctxFor(b.size)
+  scan(ctx, b.cells)
+  return {
+    score: [0, ctx.score[1], ctx.score[2]],
+    fours: [[], ctx.fours[1].slice(), ctx.fours[2].slice()],
+  }
+}
+
 /** 후보: 돌에서 거리 NEAR 이내의 빈칸. 돌이 없으면 중앙 */
 export function candidates(b: Pick<OmokBoard, 'size' | 'cells'>): number[] {
   const size = b.size
