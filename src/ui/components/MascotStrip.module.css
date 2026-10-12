@@ -1,0 +1,63 @@
+.strip {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--sp-4);
+  width: 100%;
+  padding: var(--sp-2) var(--sp-4);
+}
+
+.stage {
+  line-height: 0;
+}
+
+.bubble {
+  position: relative;
+  min-height: calc(var(--lh-small) + 2 * var(--sp-2));
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--bg-2);
+  box-shadow:
+    0 calc(-1 * var(--u)) 0 0 var(--accent),
+    0 var(--u) 0 0 var(--accent),
+    calc(-1 * var(--u)) 0 0 0 var(--accent),
+    var(--u) 0 0 0 var(--accent);
+  overflow: hidden;
+}
+.bubble[data-visible='false'] {
+  visibility: hidden;
+}
+/* 꼬리: 왼쪽(마스코트 쪽) 가운데 */
+.bubble::after {
+  content: '';
+  position: absolute;
+  left: calc(-1 * var(--u));
+  top: 50%;
+  width: var(--u);
+  height: var(--u);
+  margin-top: calc(-0.5 * var(--u));
+  background: var(--bg-2);
+  box-shadow:
+    0 calc(-1 * var(--u)) 0 0 var(--bg-2),
+    0 var(--u) 0 0 var(--bg-2),
+    calc(-1 * var(--u)) calc(-2 * var(--u)) 0 0 var(--accent),
+    calc(-1 * var(--u)) calc(-1 * var(--u)) 0 0 var(--bg-2),
+    calc(-1 * var(--u)) 0 0 0 var(--bg-2),
+    calc(-1 * var(--u)) var(--u) 0 0 var(--bg-2),
+    calc(-1 * var(--u)) calc(2 * var(--u)) 0 0 var(--accent),
+    calc(-2 * var(--u)) calc(-1 * var(--u)) 0 0 var(--accent),
+    calc(-2 * var(--u)) 0 0 0 var(--bg-2),
+    calc(-2 * var(--u)) var(--u) 0 0 var(--accent),
+    calc(-3 * var(--u)) 0 0 0 var(--accent);
+}
+
+.text {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.extra {
+  color: var(--text-1);
+  text-align: right;
+}

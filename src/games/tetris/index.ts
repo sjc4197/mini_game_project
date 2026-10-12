@@ -309,6 +309,15 @@ export const tetrisGame: GameModule = {
   controls: {
     keyboard: ['←→ 이동', '↓ 소프트', '↑/X 시계', 'Z 반시계', 'Space 하드', 'C/Shift 홀드', 'R 다시', 'Esc 일시정지'],
   },
+  touchControls: [
+    { type: 'key', id: 'left', label: '◀', code: 'ArrowLeft' },
+    { type: 'key', id: 'right', label: '▶', code: 'ArrowRight' },
+    { type: 'key', id: 'soft', label: '▼', code: 'ArrowDown' },
+    { type: 'key', id: 'ccw', label: '↺', code: 'KeyZ' },
+    { type: 'key', id: 'cw', label: '↻', code: 'KeyX' },
+    { type: 'key', id: 'hard', label: '⤓', code: 'Space', wide: true },
+    { type: 'key', id: 'hold', label: 'HOLD', code: 'KeyC' },
+  ],
   logical: LOGICAL,
   create(host) {
     const d = TETRIS_DIFFICULTIES.find((x) => x.id === host.difficulty) ?? TETRIS_DIFFICULTIES[0]!

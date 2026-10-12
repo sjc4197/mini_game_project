@@ -4,7 +4,7 @@ import { formatClockTenths } from '@/lib/format'
 import { mulberry32, randomSeed } from '@/lib/rng'
 import { MINE_ICON } from '../icons'
 import type { GameHost, GameInstance, GameInstanceState, GameModule } from '../types'
-import { attachPointer } from './input'
+import { attachPointer, type PointerHandle } from './input'
 import {
   chord,
   createBoard,
@@ -42,7 +42,7 @@ class MinesweeperInstance implements GameInstance {
   private readonly loop: Loop
   private canvas: PixelCanvas | null = null
   private sprites: CellSprites | null = null
-  private detachPointer: (() => void) | null = null
+  private pointer: PointerHandle | null = null
   private dirty = true
   private lastSecond = -1
   private finishAfter = -1
@@ -76,7 +76,7 @@ class MinesweeperInstance implements GameInstance {
     this.canvas = createPixelCanvas(w, h)
     this.canvas.mount(el)
     this.sprites = buildCellSprites()
-    this.detachPointer = attachPointer(this.canvas.element, (cx, cy) => this.cellAt(cx, cy), {
+    this.pointer = attachPointer(this.canvas.element, (cx, cy) => this.cellAt(cx, cy), {
       primary: (c) => this.primary(c),
       secondary: (c) => this.secondary(c),
       chord: (c) => this.chordAt(c),
@@ -110,11 +110,15 @@ class MinesweeperInstance implements GameInstance {
     this.loop.resume()
   }
 
+  setOption(option: string, value: boolean): void {
+    if (option === 'flagMode') this.pointer?.setFlagMode(value)
+  }
+
   destroy(): void {
     if (this.state === 'destroyed') return
     this.loop.stop()
-    this.detachPointer?.()
-    this.detachPointer = null
+    this.pointer?.detach()
+    this.pointer = null
     this.canvas?.destroy()
     this.canvas = null
     this.state = 'destroyed'
@@ -414,6 +418,9 @@ export const minesweeperGame: GameModule = {
     keyboard: ['←→↑↓ 커서', 'Enter/Z 열기', 'X 깃발', 'Space 코드', 'R 다시', 'Esc 일시정지'],
     mouse: ['좌클릭 열기', '우클릭 깃발', '양쪽/가운데 코드'],
   },
+  touchControls: [
+    { type: 'toggle', id: 'flag', label: '⚑ 깃발 모드: 끔', labelOn: '⚑ 깃발 모드: 켬', option: 'flagMode' },
+  ],
   logical: logicalSize(30, 16),
   create(host) {
     const d = MS_DIFFICULTIES.find((x) => x.id === host.difficulty) ?? MS_DIFFICULTIES[0]!

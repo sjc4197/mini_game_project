@@ -9,9 +9,12 @@ import { getGame } from '@/games/registry'
 import type { GameInstance } from '@/games/types'
 import { Hud } from '@/ui/components/Hud'
 import { MascotPanel } from '@/ui/components/MascotPanel'
+import { MascotStrip } from '@/ui/components/MascotStrip'
 import { MenuList } from '@/ui/components/MenuList'
 import { PauseOverlay } from '@/ui/components/PauseOverlay'
 import { ResultOverlay } from '@/ui/components/ResultOverlay'
+import { TouchBar } from '@/ui/components/TouchBar'
+import { COARSE_QUERY, NARROW_QUERY, touchForced, useMediaQuery } from '@/ui/hooks/useMediaQuery'
 import styles from './GameScreen.module.css'
 
 type GameScreenState = Extract<Screen, { kind: 'game' }>
@@ -22,8 +25,8 @@ interface Running {
 }
 
 /**
- * 게임 공통 프레임: HUD · 보드(캔버스 컨테이너) · 마스코트 패널 · 조작 힌트 + 일시정지/결과 오버레이.
- * 게임 인스턴스의 수명은 useEffect 하나와 같다 — runId 가 바뀌면 파괴 후 새로 만든다 (다시 시작).
+ * 게임 공통 프레임: HUD · 보드(캔버스 컨테이너) · 마스코트 패널(좁은 화면은 스트립) · 터치 바 · 조작 힌트
+ * + 일시정지/결과 오버레이. 게임 인스턴스의 수명은 useEffect 하나와 같다 — runId 가 바뀌면 파괴 후 새로 만든다.
  */
 export function GameScreen({ screen }: { screen: GameScreenState }) {
   const navigate = useStore((s) => s.navigate)
@@ -35,6 +38,8 @@ export function GameScreen({ screen }: { screen: GameScreenState }) {
   const mood = useSession((s) => s.mood)
   const line = useSession((s) => s.line)
   const result = useSession((s) => s.result)
+  const narrow = useMediaQuery(NARROW_QUERY)
+  const coarse = useMediaQuery(COARSE_QUERY)
   const [runId, setRunId] = useState(0)
   const boardRef = useRef<HTMLDivElement>(null)
   const runningRef = useRef<Running | null>(null)
@@ -44,8 +49,13 @@ export function GameScreen({ screen }: { screen: GameScreenState }) {
     game?.difficulties.find((d) => d.id === screen.difficulty) ?? game?.difficulties[0]
 
   const best = game && difficulty ? (records[game.id]?.[difficulty.id]?.best ?? null) : null
+  const showTouch = (coarse || touchForced()) && (game?.touchControls?.length ?? 0) > 0
   const toLobby = useCallback(() => navigate({ kind: 'lobby' }), [navigate])
   const restart = useCallback(() => setRunId((r) => r + 1), [])
+  const onToggle = useCallback(
+    (option: string, value: boolean) => runningRef.current?.instance.setOption?.(option, value),
+    [],
+  )
 
   const pause = useCallback(() => {
     const run = runningRef.current
@@ -115,6 +125,8 @@ export function GameScreen({ screen }: { screen: GameScreenState }) {
     )
   }
 
+  const bestLabel = `BEST ${best ? game.scoring.format(best.value) : '—'}`
+
   return (
     <main className={styles.screen}>
       <Hud
@@ -124,6 +136,14 @@ export function GameScreen({ screen }: { screen: GameScreenState }) {
         paused={status === 'paused'}
         onPause={pause}
       />
+      {narrow && (
+        <div className={styles.strip}>
+          <MascotStrip character={character} mood={mood} line={line}>
+            {bestLabel}
+            {result?.isRecord && <span className={`px-blink ${styles.record}`}> NEW RECORD!</span>}
+          </MascotStrip>
+        </div>
+      )}
       <div
         ref={boardRef}
         className={styles.board}
@@ -131,12 +151,19 @@ export function GameScreen({ screen }: { screen: GameScreenState }) {
         tabIndex={0}
         aria-label={`${game.title} 보드`}
       />
-      <MascotPanel character={character} mood={mood} line={line} className={styles.mascot}>
-        <span className="t-small">BEST {best ? game.scoring.format(best.value) : '—'}</span>
-        {result?.isRecord && (
-          <span className={`t-small px-blink ${styles.record}`}>NEW RECORD!</span>
-        )}
-      </MascotPanel>
+      {!narrow && (
+        <MascotPanel character={character} mood={mood} line={line} className={styles.mascot}>
+          <span className="t-small">{bestLabel}</span>
+          {result?.isRecord && (
+            <span className={`t-small px-blink ${styles.record}`}>NEW RECORD!</span>
+          )}
+        </MascotPanel>
+      )}
+      {showTouch && game.touchControls && (
+        <div className={styles.touch}>
+          <TouchBar key={runId} controls={game.touchControls} onToggle={onToggle} />
+        </div>
+      )}
       <footer className={`t-small ${styles.foot}`}>
         {[...game.controls.keyboard, ...(game.controls.mouse ?? [])].join(' · ')}
       </footer>

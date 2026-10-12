@@ -1,0 +1,43 @@
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--sp-3);
+  width: 100%;
+  padding: var(--sp-2) 0;
+  touch-action: none;
+  user-select: none;
+}
+
+.btn {
+  min-width: calc(28 * var(--u));
+  min-height: calc(22 * var(--u));
+  padding: var(--sp-2) var(--sp-4);
+  color: var(--text-0);
+  background: var(--bg-2);
+  box-shadow:
+    0 calc(-1 * var(--u)) 0 0 var(--line-0),
+    0 var(--u) 0 0 var(--line-0),
+    calc(-1 * var(--u)) 0 0 0 var(--line-0),
+    var(--u) 0 0 0 var(--line-0),
+    inset var(--u) var(--u) 0 0 var(--line-1),
+    inset calc(-1 * var(--u)) calc(-1 * var(--u)) 0 0 var(--ink);
+  touch-action: none;
+}
+.btn:active {
+  background: var(--bg-3);
+  box-shadow:
+    0 calc(-1 * var(--u)) 0 0 var(--line-0),
+    0 var(--u) 0 0 var(--line-0),
+    calc(-1 * var(--u)) 0 0 0 var(--line-0),
+    var(--u) 0 0 0 var(--line-0),
+    inset var(--u) var(--u) 0 0 var(--ink),
+    inset calc(-1 * var(--u)) calc(-1 * var(--u)) 0 0 var(--line-1);
+}
+.wide {
+  min-width: calc(44 * var(--u));
+}
+.on {
+  color: var(--accent-ink);
+  background: var(--accent);
+}

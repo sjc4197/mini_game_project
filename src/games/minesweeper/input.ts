@@ -100,13 +100,81 @@ export function createPointerMachine(a: PointerActions): PointerMachine {
   }
 }
 
-/** DOM 연결: 캔버스 요소 + 좌표→셀 변환. 반환값은 해제 함수 */
+export interface PointerHandle {
+  detach(): void
+  /** 터치: 탭이 열기 대신 깃발 */
+  setFlagMode(on: boolean): void
+}
+
+const LONG_PRESS_MS = 350
+const TAP_MOVE_PX = 8
+
+interface TouchState {
+  id: number
+  cell: number
+  x: number
+  y: number
+  timer: ReturnType<typeof setTimeout> | null
+  fired: boolean
+  cancelled: boolean
+}
+
+/**
+ * DOM 연결: 캔버스 요소 + 좌표→셀 변환.
+ * 마우스/펜은 버튼 상태기계, 터치는 탭(열기) / 길게 누르기(깃발 + 진동) / 깃발 모드(탭 = 깃발).
+ */
 export function attachPointer(
   el: HTMLElement,
   toCell: (clientX: number, clientY: number) => number,
   actions: PointerActions,
-): () => void {
+): PointerHandle {
   const m = createPointerMachine(actions)
+  let flagMode = false
+  let touch: TouchState | null = null
+  const endTouch = (): void => {
+    if (touch?.timer) clearTimeout(touch.timer)
+    touch = null
+  }
+  const onTouch = (kind: PointerKind, e: PointerEvent): void => {
+    const cell = toCell(e.clientX, e.clientY)
+    if (kind === 'down') {
+      endTouch()
+      const t: TouchState = {
+        id: e.pointerId,
+        cell,
+        x: e.clientX,
+        y: e.clientY,
+        timer: null,
+        fired: false,
+        cancelled: false,
+      }
+      t.timer = setTimeout(() => {
+        t.fired = true
+        actions.pressCancel()
+        actions.secondary(t.cell)
+        navigator.vibrate?.(20)
+      }, LONG_PRESS_MS)
+      touch = t
+      actions.pressStart(cell, false)
+      return
+    }
+    if (!touch || touch.id !== e.pointerId) return
+    if (kind === 'move') {
+      if (!touch.cancelled && Math.hypot(e.clientX - touch.x, e.clientY - touch.y) > TAP_MOVE_PX) {
+        touch.cancelled = true
+        if (touch.timer) clearTimeout(touch.timer)
+        actions.pressCancel()
+      }
+      return
+    }
+    const t = touch
+    endTouch()
+    actions.pressCancel()
+    if (kind === 'up' && !t.fired && !t.cancelled) {
+      if (flagMode) actions.secondary(t.cell)
+      else actions.primary(t.cell)
+    }
+  }
   const on = (kind: PointerKind) => (e: PointerEvent) => {
     if (kind === 'down') {
       e.preventDefault()
@@ -116,6 +184,10 @@ export function attachPointer(
         /* 캡처 실패해도 동작 */
       }
     }
+    if (e.pointerType === 'touch') {
+      onTouch(kind, e)
+      return
+    }
     m.handle(kind, e.buttons, toCell(e.clientX, e.clientY))
   }
   const down = on('down')
@@ -123,7 +195,13 @@ export function attachPointer(
   const up = on('up')
   const leave = on('leave')
   const cancel = on('cancel')
-  const blur = (): void => m.reset()
+  const blur = (): void => {
+    m.reset()
+    if (touch) {
+      endTouch()
+      actions.pressCancel()
+    }
+  }
   const context = (e: Event): void => e.preventDefault()
 
   el.addEventListener('pointerdown', down)
@@ -133,13 +211,20 @@ export function attachPointer(
   el.addEventListener('pointercancel', cancel)
   el.addEventListener('contextmenu', context)
   window.addEventListener('blur', blur)
-  return () => {
-    el.removeEventListener('pointerdown', down)
-    el.removeEventListener('pointermove', move)
-    el.removeEventListener('pointerup', up)
-    el.removeEventListener('pointerleave', leave)
-    el.removeEventListener('pointercancel', cancel)
-    el.removeEventListener('contextmenu', context)
-    window.removeEventListener('blur', blur)
+  el.style.touchAction = 'none'
+  return {
+    detach() {
+      endTouch()
+      el.removeEventListener('pointerdown', down)
+      el.removeEventListener('pointermove', move)
+      el.removeEventListener('pointerup', up)
+      el.removeEventListener('pointerleave', leave)
+      el.removeEventListener('pointercancel', cancel)
+      el.removeEventListener('contextmenu', context)
+      window.removeEventListener('blur', blur)
+    },
+    setFlagMode(on) {
+      flagMode = on
+    },
   }
 }

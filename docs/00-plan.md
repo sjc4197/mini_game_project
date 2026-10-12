@@ -340,7 +340,7 @@ interface GameHost {
 - 점수: 1/2/3/4줄 = 100/300/500/800 × 레벨, B2B ×1.5, 콤보 50×콤보×레벨. 레벨 = 시작 + ⌊라인/10⌋. 난이도 = 시작 레벨 `lv1 / lv5 / lv10`. T-spin·퍼펙트클리어 후속.
 - 클리어 애니 310ms(플래시 4회 160ms → 중앙 바깥 와이프 150ms) 후 collapse, ARE 0. 테트리스 시 테두리 플래시. 게임오버 = block out / lock out → 0.8초 회색 덮임 → `finish`.
 - 조작: ←→(DAS) ↓ Space ↑/X Z/Ctrl C/Shift Esc/P R.
-- 렌더: 논리 캔버스 324×340(좌 HOLD, 중앙 보드 160×320, 우 NEXT×5), 블록 3톤 베벨 타일(팔레트 7색 + light/dark), 고스트 1px 테두리 α0.6, 숨김 행 미표시. HUD: 점수 · 레벨 · 라인 · 시간 · BEST.
+- 렌더: 논리 캔버스 **260×260, 셀 12dp**(좌 HOLD, 중앙 보드 120×240, 우 NEXT×5 — 13단계에서 324×340/16dp 에서 축소: 800px 높이 창에서도 정수 2배가 들어가고 1080p·125% 노트북은 3배), 블록 3톤 베벨 타일(팔레트 7색 + light/dark), 고스트 1px 테두리 α0.6, 숨김 행 미표시. HUD: 점수 · 레벨 · 라인 · 시간 · BEST.
 - 기록: 시작 레벨별 최고 점수(`betterIs:'higher'`, `countsWhen:'any'`), stats에 lines/level/tetrises/maxCombo.
 
 ---
@@ -367,6 +367,7 @@ interface GameHost {
 | 15 | 반응형·터치 + README + 마무리 | narrow 스트립 레이아웃, 테트리스 가상 버튼(DOM→input 주입), 지뢰찾기 탭/길게 눌러 깃발 + 토글, `favicon.svg`, README, 서브셋 폰트(여유 시), `npm run build && preview` | <960px에서 스트립, 모바일 폭에서 플레이 가능, 빌드 성공 |
 
 - 단계 중 발견된 버그는 그 단계에서 수정. 단계가 커지면 보고 후 분할.
+  - 15단계 구현 노트(2026-10-12): 좁은 화면(<960px)은 HUD 2줄 + 마스코트 스트립(1u 고양이 + 한 줄 말풍선 + BEST) + 보드 + 터치 바, 키보드 힌트는 숨김. 터치 바는 `GameModule.touchControls`(키 버튼 = InputService 에 keydown/keyup 주입, 토글 = `GameInstance.setOption`)로 게임이 선언. 지뢰찾기 터치: 탭 열기 · 350ms 길게 깃발(+진동) · 깃발 모드 토글. DEV `?touch=1` 로 강제 표시. 폰트 서브셋은 하지 않음(2.7MB woff2 그대로).
   - 6단계 분할(2026-10-08): **6a** 로비 + 마스코트 리액터/말풍선/패널 + 게임 계약·레지스트리 / **6b** 게임 호스트 + 루프 + 게임 화면 + 난이도 피커 + 샘플 게임.
 - 새 게임 추가 절차: `games/<id>/`(`sample/` 복사) → `GameModule` 구현 → `registry.ts` 1줄 → 로비 자동 노출 → `registerGameLines()`로 캐릭터 대사(선택).
 

@@ -35,6 +35,9 @@
 .cats {
   grid-row: 3;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 100%;
   gap: var(--sp-6);
   align-items: flex-end;
   padding: var(--sp-4) var(--sp-8);

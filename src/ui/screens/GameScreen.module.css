@@ -3,10 +3,11 @@
   min-height: 100dvh;
   display: grid;
   grid-template-columns: 1fr auto;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto 1fr auto auto;
   grid-template-areas:
     'hud hud'
     'board mascot'
+    'touch touch'
     'foot foot';
   gap: var(--sp-4) var(--sp-8);
   padding: var(--sp-6) var(--sp-8);
@@ -49,6 +50,14 @@
   color: var(--success);
 }
 
+.strip {
+  grid-area: strip;
+}
+
+.touch {
+  grid-area: touch;
+}
+
 .foot {
   grid-area: foot;
   text-align: center;
@@ -66,13 +75,20 @@
 @media (max-width: 959px) {
   .screen {
     grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr auto auto;
     grid-template-areas:
       'hud'
+      'strip'
       'board'
-      'mascot'
+      'touch'
       'foot';
+    padding: var(--sp-4);
   }
-  .mascot {
-    justify-self: center;
+  .board {
+    min-height: calc(100 * var(--u));
+  }
+  /* 좁은 화면: 키보드 힌트는 접고 보드에 높이를 준다 */
+  .foot {
+    display: none;
   }
 }

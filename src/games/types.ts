@@ -110,9 +110,16 @@ export type GameInstanceState =
   | 'finished'
   | 'destroyed'
 
+/** 터치 조작 바 항목: 키 버튼(누르는 동안 keydown 주입) 또는 게임 옵션 토글 */
+export type TouchControl =
+  | { type: 'key'; id: string; label: string; code: string; wide?: boolean }
+  | { type: 'toggle'; id: string; label: string; labelOn: string; option: string }
+
 export interface GameInstance {
   readonly state: GameInstanceState
   mount(el: HTMLElement): void
+  /** 터치 바 토글 등 프레임이 넘기는 옵션 */
+  setOption?(option: string, value: boolean): void
   start(): void
   pause(): void
   resume(): void
@@ -149,6 +156,8 @@ export interface GameModule {
   controls: GameControls
   /** 논리 캔버스 크기(dp) — 프레임이 정수 배율을 정한다 */
   logical: { w: number; h: number }
+  /** 터치 기기에서 보드 아래에 띄울 조작 버튼 */
+  touchControls?: readonly TouchControl[]
   /** DEV 빌드에서만 로비에 노출 (샘플 게임) */
   devOnly?: boolean
   create(host: GameHost): GameInstance

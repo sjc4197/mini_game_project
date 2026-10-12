@@ -36,6 +36,20 @@
 .pause {
   justify-self: end;
 }
+
+@media (max-width: 959px) {
+  .hud {
+    grid-template-columns: 1fr auto;
+  }
+  .values {
+    grid-column: 1 / -1;
+    justify-content: center;
+    gap: var(--sp-6);
+  }
+  .value {
+    min-width: calc(28 * var(--u));
+  }
+}
 .key {
   margin-left: var(--sp-2);
   opacity: 0.7;
