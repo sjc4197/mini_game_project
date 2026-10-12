@@ -1,7 +1,7 @@
 import { bob, compose, squash } from '@/pixel/compose'
 import type { Clip, Layer, Mood, Point, Raster, SpriteDef } from '@/pixel/types'
 import { DOTS, SPARKLE_A, SPARKLE_B, STEAM_A, STEAM_B, SWEAT } from './extras'
-import { FACES } from './faces'
+import { FACES, LOAF_FACES, type LoafFaceKey } from './faces'
 import type { CharacterDef, FaceKey } from './types'
 
 /**
@@ -39,10 +39,14 @@ function frame(c: CharacterDef, key: string, spec: FrameSpec): Raster {
   return compose({ key, w: STAGE.w, h: STAGE.h, layers, accent: c.accent })
 }
 
-function loafFrame(c: CharacterDef, key: string, face: FaceKey, steam: SpriteDef): Raster {
+export function loafFaceOf(c: CharacterDef, key: LoafFaceKey): SpriteDef {
+  return c.loafFaces?.[key] ?? LOAF_FACES[key]
+}
+
+function loafFrame(c: CharacterDef, key: string, face: LoafFaceKey, steam: SpriteDef): Raster {
   const layers: Layer[] = [
     { sprite: c.loaf, at: STAGE.loafAt },
-    { sprite: faceOf(c, face), at: onLoaf(c.loaf.points.face) },
+    { sprite: loafFaceOf(c, face), at: onLoaf(c.loaf.points.face) },
     { sprite: steam, at: onLoaf(c.loaf.points.steam) },
   ]
   return compose({ key, w: STAGE.w, h: STAGE.h, layers, accent: c.accent })

@@ -27,5 +27,7 @@ export interface CharacterDef {
   idle: { kind: 'squash'; row: number } | { kind: 'bob' }
   /** 공용 얼굴 타일을 캐릭터별로 덮어쓸 때 (예: 큐보 LED 눈, 달냥 반쯤 감은 눈) */
   faces?: Partial<Record<FaceKey, SpriteDef>>
+  /** 식빵 자세 정면 얼굴 오버라이드 (idle/blink) */
+  loafFaces?: Partial<Record<'idle' | 'blink', SpriteDef>>
   lines: LineTable
 }

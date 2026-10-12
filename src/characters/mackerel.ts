@@ -1,5 +1,5 @@
 import { ACCENTS } from '@/pixel/palette'
-import { recolorFaces } from './faces'
+import { recolorFaces, recolorLoafFaces } from './faces'
 import { catBody, catLoaf } from './template'
 import type { CharacterDef } from './types'
 
@@ -24,6 +24,7 @@ export const mackerel: CharacterDef = {
   loaf: catLoaf('mackerel.loaf', PALETTE),
   idle: { kind: 'squash', row: 27 },
   faces: recolorFaces('mackerel', { e: '#1E2436', k: '#1E2436', p: '#F0A0B0' }),
+  loafFaces: recolorLoafFaces('mackerel', { e: '#1E2436', k: '#1E2436', p: '#F0A0B0' }),
   lines: {
     'ui.idle': ['놀자! 뭐든 좋아!', '꼬리 잡기 할 사람!', '후다닥! …아무것도 아냐.'],
     'ui.lobby.hover': ['빨리빨리! 뭐 할 거야?', '다 재밌어 보여!'],

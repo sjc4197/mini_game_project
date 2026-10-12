@@ -113,7 +113,7 @@ export function catBody(
 /**
  * 식빵 자세 46×34 — 사용자 도안(docs/art/cat-design-loaf.png)을 8.25px 격자로 샘플링 → 3×3 최빈값 필터 → 손질.
  * 추가 키 b = 빵 크러스트(오른쪽 어두운 면). 줄무늬 d 와 분리해 두어 우유/샴은 줄무늬만 지우고 크러스트 음영은 남긴다.
- * 얼굴은 비워 두고 같은 15×9 얼굴 타일을 LOAF_POINTS.face 에 얹는다. 김(STEAM)은 LOAF_POINTS.steam 위치.
+ * 얼굴은 비워 두고 정면용 대칭 타일(faces.ts LOAF_FACES 17×9)을 LOAF_POINTS.face 에 얹는다. 김(STEAM)은 LOAF_POINTS.steam 위치.
  */
 export const LOAF_ROWS: readonly string[] = [
   '.......................kkkkkkkk...............',
@@ -128,11 +128,11 @@ export const LOAF_ROWS: readonly string[] = [
   '.krdrrrrddrddrddrrdpppdkrrrrrrrrrrrrbbbbbk....',
   '.kdrrrrrddrddrddccrddddkrrrrrrrrrrbbbbbbbk....',
   '.krccrrrddrddrddcccrrddkrrrrrrrrbbbbbbbbk.....',
-  'krcccrrrrrrddrrrrrcccrdkrrrrrrbbbbbbbbbbk.....',
-  'krccrrrrrrrrrrrrrrrcccrkbbbbbbbbbbbbbbbbk.....',
-  'krrrrrrrrrrrrrrrrrrcccrkbbbbbbbbbbbbbbbbk.....',
-  'krrrrrrrrrrrrrrrrrrrccckbbbbbbbbbbbbbbbbkk....',
-  'krrrrrrrrrrrrrrrrrrrccckbbbbbbbbbbbbbbbbkddk..',
+  '.kcccrrrrrrddrrrrrcccrdkrrrrrrbbbbbbbbbbk.....',
+  '.kccrrrrrrrrrrrrrrrcccrkbbbbbbbbbbbbbbbbk.....',
+  '.krrrrrrrrrrrrrrrrrcccrkbbbbbbbbbbbbbbbbk.....',
+  '.krrrrrrrrrrrrrrrrrrccckbbbbbbbbbbbbbbbbkk....',
+  '.krrrrrrrrrrrrrrrrrrccckbbbbbbbbbbbbbbbbkddk..',
   '.kdrrrrrrrrrrrrrrrrrrcrkbbbbbbbbbbbbbbbbkdddk.',
   '.kdrrrrrrrrrrrrrrrrrrrdkbbbbbbbbbbbbbbbbkdddk.',
   '.kdrrrrrcccccrrrrrrrrrdkbbbbbbbbdkkkddddkddddk',
@@ -153,7 +153,7 @@ export const LOAF_ROWS: readonly string[] = [
 ]
 
 export const LOAF_POINTS: Readonly<Record<'face' | 'steam', Point>> = {
-  face: { x: 3, y: 15 },
+  face: { x: 4, y: 15 }, // 정면 얼굴 타일 17×9 (머리 중심 col 12 기준 대칭)
   steam: { x: 17, y: -7 },
 }
 

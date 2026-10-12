@@ -1,5 +1,5 @@
 import { ACCENTS } from '@/pixel/palette'
-import { recolorFaces } from './faces'
+import { recolorFaces, recolorLoafFaces } from './faces'
 import { catBody, catLoaf, chinShadow, paintRect, replaceAll } from './template'
 import type { CharacterDef } from './types'
 
@@ -41,6 +41,7 @@ export const siam: CharacterDef = {
   }),
   idle: { kind: 'squash', row: 27 },
   faces: recolorFaces('siam', { e: '#4F7BE8', k: '#F3E3C3', p: '#D8938A' }),
+  loafFaces: recolorLoafFaces('siam', { e: '#4F7BE8', k: '#F3E3C3', p: '#D8938A' }),
   lines: {
     'ui.idle': ['…냐암. (하품)', '날 깨운 건 너냐옹?', '달이 뜨면 깨울 것.'],
     'ui.lobby.hover': ['빨리 고르라냥. 졸리다냥.', '아무거나 해라냥.'],

@@ -1,5 +1,5 @@
 import { ACCENTS } from '@/pixel/palette'
-import { recolorFaces } from './faces'
+import { recolorFaces, recolorLoafFaces } from './faces'
 import { catBody, catLoaf, chinShadow, replaceAll } from './template'
 import type { CharacterDef } from './types'
 
@@ -24,6 +24,7 @@ export const milk: CharacterDef = {
   loaf: catLoaf('milk.loaf', PALETTE, (rows) => replaceAll(rows, 'd', 'r')),
   idle: { kind: 'squash', row: 27 },
   faces: recolorFaces('milk', { e: '#2E2A33', k: '#2E2A33', p: '#FFB3C0' }),
+  loafFaces: recolorLoafFaces('milk', { e: '#2E2A33', k: '#2E2A33', p: '#FFB3C0' }),
   lines: {
     'ui.idle': ['…안녕. 여기 있을게.', '(살짝 손 흔듦)', '오늘도 같이 놀자.'],
     'ui.lobby.hover': ['뭐든 좋아… 네가 고른 거면.', '천천히 골라도 돼.'],

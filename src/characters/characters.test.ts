@@ -11,13 +11,17 @@ import {
   registerGameLines,
 } from './index'
 import { DOTS, SPARKLE_A, SPARKLE_B, SWEAT } from './extras'
-import { FACES, FACE_KEYS } from './faces'
+import { FACES, FACE_KEYS, LOAF_FACES, LOAF_FACE_KEYS } from './faces'
 import { characterIcon } from './icon'
 import { overlongLines } from './lines'
 
 describe('스프라이트 정의 검증', () => {
   it('공용 얼굴 7종 + 부속 전부 행 길이/팔레트 OK', () => {
     for (const key of FACE_KEYS) expect(validateSprite(FACES[key]), key).toEqual([])
+    for (const key of LOAF_FACE_KEYS) {
+      expect(validateSprite(LOAF_FACES[key]), `loaf ${key}`).toEqual([])
+      expect([LOAF_FACES[key].w, LOAF_FACES[key].h]).toEqual([17, 9])
+    }
     for (const s of [SWEAT, SPARKLE_A, SPARKLE_B, ...DOTS])
       expect(validateSprite(s), s.id).toEqual([])
   })
@@ -29,6 +33,11 @@ describe('스프라이트 정의 검증', () => {
       expect(validateSprite(c.body)).toEqual([])
       expect([c.loaf.w, c.loaf.h]).toEqual([46, 34])
       expect(validateSprite(c.loaf)).toEqual([])
+      expect(c.loaf.points.face.x + 17).toBeLessThanOrEqual(46)
+      for (const [key, face] of Object.entries(c.loafFaces ?? {})) {
+        expect(validateSprite(face!), `${c.id} loaf face ${key}`).toEqual([])
+        expect([face!.w, face!.h]).toEqual([17, 9])
+      }
       for (const [key, face] of Object.entries(c.faces ?? {})) {
         expect(validateSprite(face!), `${c.id} face ${key}`).toEqual([])
         expect([face!.w, face!.h]).toEqual([15, 9])

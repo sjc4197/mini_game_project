@@ -103,6 +103,44 @@ export const FACES: Readonly<Record<FaceKey, SpriteDef>> = {
   ]),
 }
 
+/** 식빵 자세(정면)용 대칭 얼굴 17×9: 눈 4×4 둘, 가운데 코, ω 입. idle/blink 만 쓴다 */
+export type LoafFaceKey = 'idle' | 'blink'
+
+const loafFace = (key: LoafFaceKey, rows: readonly string[]): SpriteDef => ({
+  id: `loaf.face.${key}`,
+  w: 17,
+  h: 9,
+  palette: FACE_PALETTE,
+  rows,
+})
+
+export const LOAF_FACES: Readonly<Record<LoafFaceKey, SpriteDef>> = {
+  idle: loafFace('idle', [
+    '.................',
+    '.eeee.......eeee.',
+    '.ewee.......ewee.',
+    '.eeee.......eeee.',
+    '.eeee.......eeee.',
+    '.......ppp.......',
+    '........p........',
+    '.....k..k..k.....',
+    '......kk.kk......',
+  ]),
+  blink: loafFace('blink', [
+    '.................',
+    '.................',
+    '.................',
+    '.eeee.......eeee.',
+    '.................',
+    '.......ppp.......',
+    '........p........',
+    '.....k..k..k.....',
+    '......kk.kk......',
+  ]),
+}
+
+export const LOAF_FACE_KEYS: readonly LoafFaceKey[] = ['idle', 'blink']
+
 export const FACE_KEYS: readonly FaceKey[] = [
   'idle',
   'blink',
@@ -112,6 +150,19 @@ export const FACE_KEYS: readonly FaceKey[] = [
   'win',
   'think',
 ]
+
+/** 식빵 얼굴도 같은 색 오버라이드로 */
+export function recolorLoafFaces(
+  prefix: string,
+  overrides: Partial<Record<keyof typeof FACE_PALETTE, `#${string}`>>,
+): Partial<Record<LoafFaceKey, SpriteDef>> {
+  const out: Partial<Record<LoafFaceKey, SpriteDef>> = {}
+  for (const key of LOAF_FACE_KEYS) {
+    const base = LOAF_FACES[key]
+    out[key] = { ...base, id: `${prefix}.loaf.face.${key}`, palette: { ...base.palette, ...overrides } }
+  }
+  return out
+}
 
 /** 공용 타일의 색만 바꾼 캐릭터 전용 세트 (외곽선·눈·코 색을 몸통 팔레트에 맞출 때) */
 export function recolorFaces(
