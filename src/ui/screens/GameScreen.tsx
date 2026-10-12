@@ -77,6 +77,7 @@ export function GameScreen({ screen }: { screen: GameScreenState }) {
     })
     const instance = game.create(handle.host)
     runningRef.current = { instance, handle }
+    if (import.meta.env.DEV) (window as unknown as { __app?: { game?: unknown } }).__app!.game = instance
     instance.mount(el)
     input.setScope('game')
     useSession.getState().setStatus('running')
@@ -131,7 +132,9 @@ export function GameScreen({ screen }: { screen: GameScreenState }) {
       <MascotPanel character={character} mood={mood} line={line} className={styles.mascot}>
         <span className="t-small">BEST —</span>
       </MascotPanel>
-      <footer className={`t-small ${styles.foot}`}>{game.controls.keyboard.join(' · ')}</footer>
+      <footer className={`t-small ${styles.foot}`}>
+        {[...game.controls.keyboard, ...(game.controls.mouse ?? [])].join(' · ')}
+      </footer>
       {status === 'paused' && (
         <PauseOverlay onResume={resume} onRestart={restart} onLobby={toLobby} />
       )}

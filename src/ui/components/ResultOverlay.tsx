@@ -20,7 +20,9 @@ export function ResultOverlay({ module, result, onRestart, onLobby }: Props) {
       title={<span className={win ? styles.win : styles.lose}>{win ? '★ 클리어! ★' : '게임 오버'}</span>}
     >
       <div className={styles.score}>
-        <span className={`t-small ${styles.muted}`}>{win ? '기록' : '점수'}</span>
+        <span className={`t-small ${styles.muted}`}>
+          {win ? '기록' : module.scoring.betterIs === 'lower' ? '시간' : '점수'}
+        </span>
         <span className="t-num-l">{module.scoring.format(result.score)}</span>
       </div>
       <span className={`t-small ${styles.muted}`}>플레이 시간 {formatClock(result.durationMs)}</span>
