@@ -2,10 +2,11 @@ import type { SpriteDef } from '@/pixel/types'
 import { MINE_ICON, TETRIS_ICON } from './icons'
 import { minesweeperGame } from './minesweeper'
 import { sampleGame } from './sample'
+import { tetrisGame } from './tetris'
 import type { GameModule } from './types'
 
 /** 등록된 게임 모듈. 새 게임 = 폴더 추가 + 여기 1줄 */
-export const GAMES: readonly GameModule[] = [minesweeperGame, sampleGame]
+export const GAMES: readonly GameModule[] = [minesweeperGame, tetrisGame, sampleGame]
 
 export function getGame(id: string): GameModule | undefined {
   return GAMES.find((g) => g.id === id)
