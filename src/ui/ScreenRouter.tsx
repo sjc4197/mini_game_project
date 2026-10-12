@@ -6,6 +6,7 @@ import { routerReducer } from './router'
 import { Curtain } from './ScreenTransition'
 import { BootScreen } from './screens/BootScreen'
 import { CharacterSelectScreen } from './screens/CharacterSelectScreen'
+import { GameScreen } from './screens/GameScreen'
 import { LobbyScreen } from './screens/LobbyScreen'
 import { PlaceholderScreen } from './screens/PlaceholderScreen'
 import { TitleScreen } from './screens/TitleScreen'
@@ -33,7 +34,7 @@ function ScreenView({ screen }: { screen: Screen }) {
     case 'lobby':
       return <LobbyScreen />
     case 'game':
-      return <PlaceholderScreen title={`게임: ${screen.gameId}`} note="6단계에서 구현" />
+      return <GameScreen screen={screen} />
     case 'records':
       return <PlaceholderScreen title="기록" note="11단계에서 구현" />
     case 'settings':

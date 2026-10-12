@@ -104,9 +104,13 @@ export function createMascotReactor(o: MascotReactorOptions): MascotReactor {
   const cooldownKey = (event: MascotEvent, opts: MascotReactOptions): string =>
     `${event}|${opts.lineKey ?? ''}`
 
-  /** 같은 키에서 최근 2개(풀이 작으면 1개/0개)를 피해 무작위 */
-  function pickLine(key: LineKey): string | null {
-    const pool = getLines(o.character, key, o.gameId)
+  /** 같은 키에서 최근 2개(풀이 작으면 1개/0개)를 피해 무작위. lineKey 에 대사가 없으면 이벤트 기본 키로 */
+  function pickLine(key: LineKey, fallback?: LineKey): string | null {
+    let pool = getLines(o.character, key, o.gameId)
+    if (pool.length === 0 && fallback && fallback !== key) {
+      key = fallback
+      pool = getLines(o.character, key, o.gameId)
+    }
     if (pool.length === 0) return null
     const used = recent.get(key) ?? []
     const n = Math.min(2, pool.length - 1)
@@ -172,7 +176,7 @@ export function createMascotReactor(o: MascotReactorOptions): MascotReactor {
     lastFired.set(cooldownKey(event, opts), Date.now())
     priority = p
     const suppressed = getChatter() === 'quiet' && p < 2
-    const text = suppressed ? null : (opts.line ?? pickLine(opts.lineKey ?? event))
+    const text = suppressed ? null : (opts.line ?? pickLine(opts.lineKey ?? event, event))
     if (spec.hold === 'line') {
       if (mood === 'loaf') mood = 'idle'
     } else {

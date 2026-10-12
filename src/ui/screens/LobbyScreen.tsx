@@ -8,6 +8,7 @@ import { getCharacter } from '@/characters'
 import type { LineKey } from '@/characters/types'
 import { lobbyEntries, type LobbyEntry } from '@/games/registry'
 import type { GameModule } from '@/games/types'
+import { DifficultyPicker } from '@/ui/components/DifficultyPicker'
 import { MascotPanel } from '@/ui/components/MascotPanel'
 import { PixelButton } from '@/ui/components/PixelButton'
 import { PixelIcon } from '@/ui/components/PixelIcon'
@@ -36,6 +37,7 @@ export function LobbyScreen() {
   const line = useSession((s) => s.line)
   const [entries] = useState(() => lobbyEntries())
   const [shaking, setShaking] = useState<string | null>(null)
+  const [picking, setPicking] = useState<GameModule | null>(null)
   const reactor = useRef<MascotReactor | null>(null)
 
   const confirm = useCallback(
@@ -47,10 +49,20 @@ export function LobbyScreen() {
         reactor.current?.react('ui.locked')
         return
       }
-      // 6b: 난이도 피커를 거쳐 시작
-      navigate({ kind: 'game', gameId: e.module.id, difficulty: e.module.defaultDifficulty }, 'wipe')
+      // 난이도 피커 → wipe 전환으로 게임 시작
+      setPicking(e.module)
+      input.setScope('overlay')
     },
-    [entries, navigate],
+    [entries],
+  )
+  const closePicker = useCallback(() => {
+    setPicking(null)
+    input.setScope('ui')
+  }, [])
+  const startGame = useCallback(
+    (m: GameModule, difficulty: string) =>
+      navigate({ kind: 'game', gameId: m.id, difficulty }, 'wipe'),
+    [navigate],
   )
 
   const { index, setIndex } = useKeyNav({
@@ -79,6 +91,7 @@ export function LobbyScreen() {
       r.dispose()
       reactor.current = null
       useSession.getState().setMascot('idle', null)
+      input.setScope('ui')
     }
   }, [character, entries])
 
@@ -162,6 +175,13 @@ export function LobbyScreen() {
       <footer className={`t-small ${styles.hint}`}>
         ←→↑↓ 이동 · Enter 선택 · R 기록 · S 설정 · Esc 캐릭터 변경
       </footer>
+      {picking && (
+        <DifficultyPicker
+          module={picking}
+          onPick={(d) => startGame(picking, d)}
+          onClose={closePicker}
+        />
+      )}
     </main>
   )
 }

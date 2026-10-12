@@ -1,0 +1,73 @@
+/* ≥960: "hud hud" / "board mascot" / "foot foot". 좁은 화면은 한 줄로 (15단계에서 스트립 레이아웃) */
+.screen {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    'hud hud'
+    'board mascot'
+    'foot foot';
+  gap: var(--sp-4) var(--sp-8);
+  padding: var(--sp-6) var(--sp-8);
+  user-select: none;
+}
+
+.screen > header {
+  grid-area: hud;
+}
+
+.board {
+  grid-area: board;
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: calc(120 * var(--u));
+  overflow: hidden;
+  background: var(--bg-1);
+  box-shadow: 0 0 0 var(--u) var(--line-0);
+}
+.board:focus {
+  outline: none;
+}
+.board canvas {
+  display: block;
+}
+/* 일시정지: 보드를 가린다 (치팅 방지 + 재개 시 깜빡임 없음) */
+.board[data-hidden='true'] canvas {
+  visibility: hidden;
+}
+
+.mascot {
+  grid-area: mascot;
+  align-self: start;
+  width: calc(110 * var(--u));
+}
+
+.foot {
+  grid-area: foot;
+  text-align: center;
+  color: var(--text-1);
+}
+
+.missing {
+  min-height: 100dvh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--sp-6);
+}
+
+@media (max-width: 959px) {
+  .screen {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'hud'
+      'board'
+      'mascot'
+      'foot';
+  }
+  .mascot {
+    justify-self: center;
+  }
+}

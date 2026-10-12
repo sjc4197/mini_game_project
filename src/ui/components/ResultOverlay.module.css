@@ -1,0 +1,16 @@
+.win {
+  color: var(--success);
+}
+.lose {
+  color: var(--danger);
+}
+
+.score {
+  display: grid;
+  justify-items: center;
+  gap: var(--sp-1);
+}
+
+.muted {
+  color: var(--text-1);
+}

@@ -51,3 +51,28 @@ export const TETRIS_ICON: SpriteDef = {
     '................',
   ],
 }
+
+export const STAR_ICON: SpriteDef = {
+  id: 'icon.star',
+  w: 16,
+  h: 16,
+  palette: { k: '$ink', y: '#FFD166', l: '#FFE9A8' },
+  rows: [
+    '................',
+    '.......kk.......',
+    '.......kyk......',
+    '......kyyk......',
+    '......kyyyk.....',
+    '.kkkkkkyyyykkkkk',
+    '.klyyyyyyyyyyyyk',
+    '..kyyyyyyyyyyyk.',
+    '...kyyyyyyyyyk..',
+    '....kyyyyyyyk...',
+    '....kyyyyyyyyk..',
+    '...kyyyykkyyyyk.',
+    '...kyyykk.kkyyk.',
+    '..kyykk....kkyk.',
+    '..kkk........kk.',
+    '................',
+  ],
+}

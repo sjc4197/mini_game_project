@@ -1,0 +1,42 @@
+.hud {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.title {
+  color: var(--text-0);
+}
+.diff {
+  color: var(--text-1);
+  font-weight: 400;
+}
+
+.values {
+  display: flex;
+  gap: var(--sp-8);
+  margin: 0;
+}
+.field {
+  display: grid;
+  justify-items: center;
+  gap: var(--sp-1);
+}
+.label {
+  color: var(--accent-text);
+  box-shadow: 0 var(--u) 0 0 var(--accent);
+}
+.value {
+  min-width: calc(40 * var(--u));
+  margin: 0;
+  text-align: center;
+}
+
+.pause {
+  justify-self: end;
+}
+.key {
+  margin-left: var(--sp-2);
+  opacity: 0.7;
+}
