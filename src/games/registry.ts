@@ -3,11 +3,18 @@ import { MINE_ICON, OMOK_ICON, SNAKE_ICON, TETRIS_ICON } from './icons'
 import { minesweeperGame } from './minesweeper'
 import { omokGame } from './omok'
 import { sampleGame } from './sample'
+import { snakeGame } from './snake'
 import { tetrisGame } from './tetris'
 import type { GameModule } from './types'
 
 /** 등록된 게임 모듈. 새 게임 = 폴더 추가 + 여기 1줄 */
-export const GAMES: readonly GameModule[] = [minesweeperGame, tetrisGame, omokGame, sampleGame]
+export const GAMES: readonly GameModule[] = [
+  minesweeperGame,
+  tetrisGame,
+  omokGame,
+  snakeGame,
+  sampleGame,
+]
 
 export function getGame(id: string): GameModule | undefined {
   return GAMES.find((g) => g.id === id)
