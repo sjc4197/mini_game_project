@@ -9,6 +9,7 @@ import { CharacterSelectScreen } from './screens/CharacterSelectScreen'
 import { GameScreen } from './screens/GameScreen'
 import { LobbyScreen } from './screens/LobbyScreen'
 import { PlaceholderScreen } from './screens/PlaceholderScreen'
+import { SettingsScreen } from './screens/SettingsScreen'
 import { TitleScreen } from './screens/TitleScreen'
 
 // DEV 전용 화면은 프로덕션 번들에서 제거된다 (import.meta.env.DEV 가 상수로 치환됨)
@@ -38,7 +39,7 @@ function ScreenView({ screen }: { screen: Screen }) {
     case 'records':
       return <PlaceholderScreen title="기록" note="11단계에서 구현" />
     case 'settings':
-      return <PlaceholderScreen title="설정" note="7단계에서 구현" />
+      return <SettingsScreen />
     case 'dev': {
       const Dev = screen.page === 'gallery' ? DevGalleryScreen : DevTokensScreen
       return Dev ? (

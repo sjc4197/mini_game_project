@@ -1,0 +1,19 @@
+.table {
+  border-collapse: collapse;
+  color: var(--text-0);
+}
+.table th,
+.table td {
+  padding: var(--sp-1) var(--sp-4);
+  text-align: left;
+  vertical-align: top;
+  border-bottom: var(--u) solid var(--line-0);
+}
+.table thead th {
+  color: var(--accent-text);
+}
+.table tbody th {
+  color: var(--text-1);
+  font-weight: 400;
+  white-space: nowrap;
+}

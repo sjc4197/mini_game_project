@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { audio } from '@/app/audio/audio'
 import { input } from '@/app/input/input'
 import { createMascotReactor, type MascotReactor } from '@/app/mascot'
 import { latestBest, totalPlays } from '@/app/records'
@@ -45,10 +46,12 @@ export function LobbyScreen() {
       const e = entries[i]
       if (!e) return
       if (!e.module) {
+        audio.play('deny')
         setShaking(e.id)
         reactor.current?.react('ui.locked')
         return
       }
+      audio.play('confirm')
       // 난이도 피커 → wipe 전환으로 게임 시작
       setPicking(e.module)
       input.setScope('overlay')
@@ -112,7 +115,13 @@ export function LobbyScreen() {
   return (
     <main className={styles.screen}>
       <header className={styles.header}>
-        <PixelButton size="small" tabIndex={-1} onMouseDown={noFocus} onClick={back}>
+        <PixelButton
+          size="small"
+          tabIndex={-1}
+          sfx={false}
+          onMouseDown={noFocus}
+          onClick={() => (audio.play('back'), back())}
+        >
           ◀ 캐릭터 변경
         </PixelButton>
         <h1 className="t-h1">게임 선택</h1>

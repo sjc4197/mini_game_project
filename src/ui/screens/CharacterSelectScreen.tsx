@@ -1,4 +1,5 @@
 import { useCallback, useEffect } from 'react'
+import { audio } from '@/app/audio/audio'
 import { useStore } from '@/app/store'
 import { applyCharacterTheme } from '@/app/theme'
 import { CHARACTERS, findCharacter, getCharacter } from '@/characters'
@@ -21,6 +22,7 @@ export function CharacterSelectScreen() {
     (i: number) => {
       const c = CHARACTERS[i]
       if (!c) return
+      audio.play('confirm')
       selectCharacter(c.id)
       navigate({ kind: 'lobby' })
     },
@@ -48,7 +50,13 @@ export function CharacterSelectScreen() {
   return (
     <main className={styles.screen}>
       <header className={styles.header}>
-        <PixelButton size="small" tabIndex={-1} onMouseDown={(e) => e.preventDefault()} onClick={back}>
+        <PixelButton
+          size="small"
+          tabIndex={-1}
+          sfx={false}
+          onMouseDown={(e) => e.preventDefault()}
+          onClick={() => (audio.play('back'), back())}
+        >
           ◀ 타이틀
         </PixelButton>
         <h1 className="t-h1">캐릭터 선택</h1>
@@ -99,6 +107,7 @@ export function CharacterSelectScreen() {
           <PixelButton
             variant="primary"
             tabIndex={-1}
+            sfx={false}
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => confirm(index)}
           >

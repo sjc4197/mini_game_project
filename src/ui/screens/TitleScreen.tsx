@@ -1,4 +1,5 @@
 import { useCallback, useEffect } from 'react'
+import { audio } from '@/app/audio/audio'
 import { input } from '@/app/input/input'
 import { useStore } from '@/app/store'
 import { CHARACTERS, findCharacter, getCharacterClips } from '@/characters'
@@ -13,6 +14,7 @@ export function TitleScreen() {
 
   // 저장된 캐릭터가 있으면 로비로, 없으면 캐릭터 선택으로
   const start = useCallback(() => {
+    audio.play('confirm')
     navigate(findCharacter(selectedId) ? { kind: 'lobby' } : { kind: 'select' })
   }, [navigate, selectedId])
   const openSettings = useCallback(() => navigate({ kind: 'settings', from: 'title' }), [navigate])

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { audio } from '@/app/audio/audio'
 import type { InputScope } from '@/app/input/bindings'
 import { input } from '@/app/input/input'
 import { clamp } from '@/lib/math'
@@ -38,6 +39,7 @@ export function useKeyNav({
     const v = clamp(next, 0, c)
     if (v !== ref.current.index) {
       setIndexState(v)
+      audio.play('select')
       ref.current.onMove?.(v)
     }
   }
@@ -67,6 +69,7 @@ export function useKeyNav({
         'cancel',
         () => {
           if (!ref.current.onCancel) return false
+          audio.play('back')
           ref.current.onCancel()
           return true
         },

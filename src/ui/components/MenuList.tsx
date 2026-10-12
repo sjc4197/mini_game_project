@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { audio } from '@/app/audio/audio'
 import type { InputScope } from '@/app/input/bindings'
 import { useCursorImage } from '@/ui/hooks/useCursorImage'
 import { useKeyNav } from '@/ui/hooks/useKeyNav'
@@ -44,7 +45,10 @@ export function MenuList({
     scope,
     onConfirm: (i) => {
       const item = items[i]
-      if (item && !item.disabled) item.onSelect()
+      if (item && !item.disabled) {
+        audio.play('confirm')
+        item.onSelect()
+      }
     },
     onCancel,
   })
@@ -66,6 +70,7 @@ export function MenuList({
           <PixelButton
             role="menuitem"
             tabIndex={-1}
+            sfx={false}
             focused={i === index}
             disabled={item.disabled}
             variant={item.variant}
@@ -74,7 +79,10 @@ export function MenuList({
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => {
               setIndex(i)
-              if (!item.disabled) item.onSelect()
+              if (!item.disabled) {
+                audio.play('confirm')
+                item.onSelect()
+              }
             }}
           >
             {item.label}

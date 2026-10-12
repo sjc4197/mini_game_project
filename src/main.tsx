@@ -6,6 +6,7 @@ import '@/ui/styles/base.css'
 import '@/ui/styles/layout.css'
 import '@/ui/styles/ui.css'
 import '@/ui/styles/effects.css'
+import { audio } from '@/app/audio/audio'
 import { registerFonts } from '@/app/fonts'
 import { input } from '@/app/input/input'
 import { metrics } from '@/app/metrics'
@@ -18,11 +19,13 @@ import App from './App'
 registerFonts()
 metrics.install(useStore.getState().settings.uiScale)
 input.install()
+audio.install()
 useStore.subscribe(
   (s) => s.settings,
   (settings) => {
     metrics.setUiScale(settings.uiScale)
     applyDocumentSettings(settings)
+    audio.apply(settings)
   },
   { fireImmediately: true },
 )
@@ -32,6 +35,11 @@ useStore.subscribe(
   { fireImmediately: true },
 )
 watchSystemMotion(() => useStore.getState().settings)
+
+// DEV: 콘솔/자동화에서 서비스에 접근 (window.__app)
+if (import.meta.env.DEV) {
+  ;(window as unknown as { __app: unknown }).__app = { audio, input, metrics, store: useStore }
+}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
