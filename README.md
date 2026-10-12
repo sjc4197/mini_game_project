@@ -1,18 +1,16 @@
 <div align="center">
 
-# 🐱 도트 아케이드
-
-**도트 고양이 마스코트와 함께하는 미니게임 모음**
-
-고양이를 고르면 게임 옆에서 표정과 말풍선으로 반응하고, 그 고양이의 상징색이 UI 테마가 됩니다.
-
-![캐릭터 4종 — 치즈 · 고등어 · 우유 · 샴](docs/screenshots/characters-walk.png)
+![도트 아케이드 — 도트 고양이와 함께하는 미니게임 모음](docs/screenshots/banner.png)
 
 ![React 19](https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=white)
 ![Vite 8](https://img.shields.io/badge/Vite-8-646cff?logo=vite&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-6-3178c6?logo=typescript&logoColor=white)
 ![Vitest](https://img.shields.io/badge/tests-166%20passed-9be564)
-![No dependencies at runtime](https://img.shields.io/badge/runtime%20deps-react%20%2B%20zustand-27305a)
+![Build](https://img.shields.io/badge/build-2.8%20MB%20static-27305a)
+
+고양이를 고르면 게임 옆에서 **표정과 말풍선으로 반응**하고, 그 고양이의 상징색이 **UI 테마**가 됩니다.
+
+![타이틀 화면의 고양이들](docs/screenshots/title-cats.png)
 
 </div>
 
@@ -22,38 +20,74 @@
 
 | | |
 | --- | --- |
-| 🎮 **게임 2종 + 플러그인 구조** | 지뢰찾기(초급·중급·고급), 테트리스(레벨 1·5·10). 새 게임은 폴더 하나 + 등록 한 줄 |
-| 🐾 **마스코트** | 치즈 · 고등어 · 우유 · 샴 — 표정 7종 + 식빵 자세. 게임 상황(연쇄, 위험, 실패, 신기록…)에 대사로 반응 |
-| 🎨 **도트 디자인 시스템** | 모든 치수가 디자인 픽셀 단위. DPR 보정으로 어떤 화면에서도 도트가 번지지 않음. Galmuri 픽셀 폰트, 칩튠 효과음(WebAudio) |
-| 🏆 **기록** | 난이도별 BEST · 플레이/클리어율 · 최근 10판, 신기록 연출 (브라우저 localStorage) |
+| 🎮 **게임 2종 + 플러그인 구조** | 지뢰찾기(초급 · 중급 · 고급), 테트리스(레벨 1 · 5 · 10). 새 게임은 폴더 하나 + 등록 한 줄 |
+| 🐾 **마스코트** | 치즈 · 고등어 · 우유 · 샴 — 표정 7종 + 식빵 자세. 게임 상황(연쇄 · 위험 · 실패 · 신기록 …)에 캐릭터별 대사로 반응 |
+| 🎨 **도트 디자인 시스템** | 모든 치수가 디자인 픽셀 단위, DPR 보정으로 어떤 화면에서도 도트가 번지지 않음. Galmuri 픽셀 폰트, 칩튠 효과음(WebAudio 합성) |
+| 🏆 **기록** | 난이도별 BEST · 플레이/클리어율 · 최근 10판 · 신기록 연출 (localStorage) |
 | ⚙️ **설정** | 효과음/볼륨 · CRT 스캔라인 · UI 크기 · 마스코트 수다 · 움직임 줄이기 · 테트리스 DAS/ARR |
 | 📱 **반응형 + 터치** | PC 키보드/마우스 우선, 좁은 화면은 스트립 레이아웃 + 터치 조작 바 |
 
 ## 📸 화면
 
-| 타이틀 | 캐릭터 선택 |
-| --- | --- |
-| ![타이틀](docs/screenshots/01-title.png) | ![캐릭터 선택](docs/screenshots/02-select.png) |
+<table>
+  <tr>
+    <td align="center"><b>타이틀</b></td>
+    <td align="center"><b>캐릭터 선택</b></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/01-title.png" alt="타이틀"></td>
+    <td><img src="docs/screenshots/02-select.png" alt="캐릭터 선택"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>로비</b></td>
+    <td align="center"><b>지뢰찾기</b></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/03-lobby.png" alt="로비"></td>
+    <td><img src="docs/screenshots/04-minesweeper.png" alt="지뢰찾기"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>테트리스</b></td>
+    <td align="center"><b>기록</b></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/05-tetris.png" alt="테트리스"></td>
+    <td><img src="docs/screenshots/06-records.png" alt="기록"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>설정</b></td>
+    <td align="center"><b>모바일 (390×844)</b></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/07-settings.png" alt="설정"></td>
+    <td align="center"><img src="docs/screenshots/08-phone.png" alt="모바일" width="280"></td>
+  </tr>
+</table>
 
-| 로비 | 지뢰찾기 |
-| --- | --- |
-| ![로비](docs/screenshots/03-lobby.png) | ![지뢰찾기](docs/screenshots/04-minesweeper.png) |
+## 🐈 캐릭터
 
-| 테트리스 | 기록 |
-| --- | --- |
-| ![테트리스](docs/screenshots/05-tetris.png) | ![기록](docs/screenshots/06-records.png) |
+<table>
+  <tr>
+    <td>
+      <table>
+        <tr><th></th><th>이름</th><th>종류</th><th>성격</th><th>테마색</th></tr>
+        <tr><td>🟠</td><td><b>치즈</b></td><td>치즈태비</td><td>먹보, 느긋함</td><td>주황</td></tr>
+        <tr><td>🔵</td><td><b>고등어</b></td><td>고등어태비</td><td>활발함, 장난꾸러기</td><td>하늘</td></tr>
+        <tr><td>🩷</td><td><b>우유</b></td><td>흰 고양이</td><td>수줍음, 다정함</td><td>분홍</td></tr>
+        <tr><td>💙</td><td><b>샴</b></td><td>샴</td><td>도도한 츤데레, 늘 졸림</td><td>파랑</td></tr>
+      </table>
+    </td>
+    <td align="center"><img src="docs/screenshots/loaf.png" alt="로비에서 식빵 굽는 치즈" width="200"><br><sub>로비에서 12초 가만히 두면 식빵을 굽습니다</sub></td>
+  </tr>
+</table>
 
-| 설정 | 모바일 (390×844) |
-| --- | --- |
-| ![설정](docs/screenshots/07-settings.png) | <img src="docs/screenshots/08-phone.png" alt="모바일" width="300"> |
+네 마리는 같은 도트 템플릿(걷는 포즈 42×39, 식빵 46×34)의 팔레트·무늬 변형이고, 캐릭터마다 대사표가 따로 있습니다. 능력치 차이는 없습니다.
 
-### 표정과 식빵 자세
+**표정 7종** — 기본 · 기쁨 · 걱정 · 슬픔 · 승리 · 생각 · 식빵
 
-![표정 7종](docs/screenshots/gallery.png)
+![표정 갤러리](docs/screenshots/gallery.png)
 
-![식빵 자세](docs/screenshots/characters-loaf.png)
-
-로비에서 12초 동안 가만히 두면 고양이가 식빵을 굽기 시작합니다.
+![식빵 자세 4종](docs/screenshots/characters-loaf.png)
 
 ## 🚀 실행
 
@@ -67,7 +101,7 @@ npm run preview
 
 Node 20 이상. React 19 · Vite 8 · TypeScript · zustand · Galmuri 폰트.
 
-개발 빌드 전용 진입점: `#dev/gallery`(표정 전체), `#dev/tokens`(디자인 토큰), `#go/<title|select|lobby|records|settings>`(화면 바로 열기), `?touch=1`(터치 바 강제 표시).
+개발 빌드 전용 진입점: `#dev/gallery`(표정 전체) · `#dev/tokens`(디자인 토큰) · `#go/<title|select|lobby|records|settings>`(화면 바로 열기) · `?touch=1`(터치 바 강제 표시).
 
 ## 🕹️ 조작
 
@@ -80,18 +114,7 @@ Node 20 이상. React 19 · Vite 8 · TypeScript · zustand · Galmuri 폰트.
 | 마우스 | hover = 포커스, 클릭 = 확인 | 좌클릭 열기 · 우클릭 깃발 · 양쪽/가운데 코드 | — |
 | 터치 | — | 탭 열기 · 길게 눌러 깃발 · 깃발 모드 토글 | 화면 아래 버튼 (DAS 지원) |
 
-테트리스는 모던 가이드라인을 따릅니다: SRS 회전 + 월킥, 7-bag, Next 5, 홀드, 고스트, 락 딜레이 500ms(최대 15회 리셋), B2B·콤보 보너스, DAS/ARR 조절.
-
-## 🐈 캐릭터
-
-| | 이름 | 종류 | 성격 | 테마색 |
-| --- | --- | --- | --- | --- |
-| 🟠 | **치즈** | 치즈태비 | 먹보, 느긋함 | 주황 |
-| 🔵 | **고등어** | 고등어태비 | 활발함, 장난꾸러기 | 하늘 |
-| 🩷 | **우유** | 흰 고양이 | 수줍음, 다정함 | 분홍 |
-| 💙 | **샴** | 샴 | 도도한 츤데레, 늘 졸림 | 파랑 |
-
-네 마리는 같은 도트 템플릿(걷는 포즈 42×39, 식빵 46×34)의 팔레트·무늬 변형이고, 캐릭터마다 대사표가 따로 있습니다. 능력치 차이는 없습니다.
+테트리스는 모던 가이드라인을 따릅니다: SRS 회전 + 월킥, 7-bag, Next 5, 홀드, 고스트, 락 딜레이 500ms(최대 15회 리셋), B2B · 콤보 보너스, DAS/ARR 조절.
 
 ## 🧱 구조
 
@@ -108,8 +131,8 @@ docs/          계획서(00) · 아키텍처(01) · 디자인 시스템(02) · �
 
 핵심 규칙
 
-- **게임 모듈은 React를 모른다.** `games/types.ts`의 `GameModule` / `GameInstance` / `GameHost` 계약만 쓰고, 로직은 순수 함수가 의미 이벤트(`reveal`, `clear`, `lost` …)를 돌려주면 `index.ts`가 효과음·마스코트·HUD로 매핑합니다. 로직은 전부 결정적 난수로 테스트됩니다.
-- **마스코트는 의미 이벤트에만 반응한다.** 게임은 `game.good`, `game.risky` 같은 이벤트만 던지고, 표정·우선순위·쿨다운은 `app/mascot.ts` 한 곳, 대사는 캐릭터 파일이 정합니다. 게임을 추가해도 캐릭터 코드는 건드리지 않습니다.
+- **게임 모듈은 React를 모른다.** `games/types.ts`의 `GameModule` / `GameInstance` / `GameHost` 계약만 쓰고, 로직은 순수 함수가 의미 이벤트(`reveal`, `clear`, `lost` …)를 돌려주면 `index.ts`가 효과음 · 마스코트 · HUD로 매핑합니다. 로직은 전부 결정적 난수로 테스트됩니다.
+- **마스코트는 의미 이벤트에만 반응한다.** 게임은 `game.good`, `game.risky` 같은 이벤트만 던지고, 표정 · 우선순위 · 쿨다운은 `app/mascot.ts` 한 곳, 대사는 캐릭터 파일이 정합니다. 게임을 추가해도 캐릭터 코드는 건드리지 않습니다.
 - **1dp = `--u` CSS px.** DPR 보정으로 항상 정수 디바이스 픽셀이라 도트가 번지지 않습니다. 게임 캔버스도 논리 크기만 선언하면 프레임이 정수 배율로 띄웁니다.
 
 ## ➕ 새 게임 추가
