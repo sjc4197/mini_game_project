@@ -1,7 +1,12 @@
 /**
  * 게임 모듈 ↔ 셸 경계 계약의 단일 출처.
- * 1~3단계: 결과/채점/마스코트 이벤트 타입. 6단계에서 GameModule/GameInstance/GameHost 를 채운다.
+ * 게임은 이 파일의 타입만 알고, React/스토어/오디오 구현은 모른다 (호스트가 브리지).
  */
+import type { InputService } from '@/app/input/input'
+import type { Settings } from '@/app/store'
+import type { CharacterDef, LineKey } from '@/characters/types'
+import type { Mood, SpriteDef } from '@/pixel/types'
+
 export type Outcome = 'win' | 'lose' | 'quit'
 
 export interface GameResult {
@@ -38,3 +43,111 @@ export type MascotEvent =
   | 'ui.lobby.hover'
   | 'ui.locked'
   | 'ui.idle'
+
+/** 효과음 이름 (레시피는 docs/02 부록 C, 구현은 7단계 app/audio) */
+export type SfxName =
+  | 'select'
+  | 'confirm'
+  | 'back'
+  | 'deny'
+  | 'reveal'
+  | 'flood'
+  | 'flag'
+  | 'boom'
+  | 'win'
+  | 'move'
+  | 'rotate'
+  | 'drop'
+  | 'lock'
+  | 'clear'
+  | 'tetris'
+  | 'levelup'
+  | 'gameover'
+
+export type MascotPriority = 0 | 1 | 2 | 3
+
+export interface MascotReactOptions {
+  /** 대사표 대신 이 문장을 그대로 */
+  line?: string
+  /** 이벤트 기본 키 대신 이 키의 대사표 (예: 'lobby:tetris') */
+  lineKey?: LineKey
+  /** 표정 유지 시간(ms) 덮어쓰기 */
+  hold?: number
+  priority?: MascotPriority
+}
+
+export interface MascotApi {
+  react(event: MascotEvent, opts?: MascotReactOptions): void
+  /** 말풍선 없이 표정만 (예: 셀을 누르는 동안 worried). holdMs 가 없으면 다음 변경까지 유지 */
+  setMood(mood: Mood, holdMs?: number): void
+  say(text: string): void
+  /** 표정·말풍선·대기열 초기화 (결과창 닫힘 / 재시작 시 프레임이 호출) */
+  clear(): void
+}
+
+export interface Difficulty {
+  id: string
+  label: string
+  description?: string
+}
+
+export interface HudField {
+  key: string
+  label: string
+  format?(value: string | number): string
+}
+
+export interface GameControls {
+  keyboard: readonly string[]
+  mouse?: readonly string[]
+}
+
+export type GameInstanceState =
+  | 'created'
+  | 'mounted'
+  | 'running'
+  | 'paused'
+  | 'finished'
+  | 'destroyed'
+
+export interface GameInstance {
+  readonly state: GameInstanceState
+  mount(el: HTMLElement): void
+  start(): void
+  pause(): void
+  resume(): void
+  /** 멱등. 이후 어떤 메서드도 효과 없음 */
+  destroy(): void
+}
+
+/** 셸이 게임에 넘기는 서비스 묶음 */
+export interface GameHost {
+  readonly character: CharacterDef
+  readonly difficulty: string
+  readonly settings: Readonly<Settings>
+  readonly mascot: MascotApi
+  readonly input: InputService
+  readonly audio: { play(name: SfxName): void }
+  /** rAF 코얼레싱 — 한 프레임에 여러 번 불러도 한 번만 반영 */
+  setHUD(patch: Record<string, string | number>): void
+  finish(result: GameResult): void
+  requestPause(): void
+  now(): number
+}
+
+export interface GameModule {
+  id: string
+  title: string
+  description: string
+  icon?: SpriteDef
+  difficulties: readonly Difficulty[]
+  defaultDifficulty: string
+  hud: readonly HudField[]
+  scoring: ScoringSpec
+  controls: GameControls
+  /** 논리 캔버스 크기(dp) — 프레임이 정수 배율을 정한다 */
+  logical: { w: number; h: number }
+  /** DEV 빌드에서만 로비에 노출 (샘플 게임) */
+  devOnly?: boolean
+  create(host: GameHost): GameInstance
+}

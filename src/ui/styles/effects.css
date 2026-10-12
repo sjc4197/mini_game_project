@@ -17,9 +17,32 @@
   animation: px-blink 600ms step-end infinite;
 }
 
+/* 잠긴 카드 등 "거부" 흔들림: ±1u, 4단계 */
+@keyframes px-shake {
+  0% {
+    translate: calc(-1 * var(--u)) 0;
+  }
+  25% {
+    translate: var(--u) 0;
+  }
+  50% {
+    translate: calc(-1 * var(--u)) 0;
+  }
+  75% {
+    translate: var(--u) 0;
+  }
+  100% {
+    translate: 0 0;
+  }
+}
+.px-shake {
+  animation: px-shake 240ms step-end;
+}
+
 /* 움직임 줄이기 — app/theme.ts 가 시스템 설정/앱 설정을 합쳐 data-motion 을 결정 */
 html[data-motion='reduce'] .px-blink,
-html[data-motion='reduce'] .px-blink-fast {
+html[data-motion='reduce'] .px-blink-fast,
+html[data-motion='reduce'] .px-shake {
   animation: none;
   visibility: visible;
 }

@@ -43,6 +43,15 @@ describe('이벤트 API', () => {
     expect(confirm).toHaveBeenCalledTimes(1)
     expect(hard).toHaveBeenCalledTimes(1)
   })
+  it('구독자가 소비(true)하면 같은 키의 나머지 액션은 알리지 않는다 (Escape = cancel → back 중복 방지)', () => {
+    const cancel = vi.fn(() => true)
+    const back = vi.fn()
+    svc.on('cancel', cancel, { scope: 'ui' })
+    svc.on('back', back, { scope: 'ui' })
+    svc.keydown(key('Escape'))
+    expect(cancel).toHaveBeenCalledTimes(1)
+    expect(back).not.toHaveBeenCalled()
+  })
   it('UI 스코프에서는 구독자가 소비하지 않으면 기본 동작을 막지 않는다, game 스코프에선 방향키/Space 를 막는다', () => {
     const e1 = key('ArrowDown')
     svc.keydown(e1)

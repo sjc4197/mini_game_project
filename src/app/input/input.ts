@@ -71,6 +71,9 @@ export class InputService {
     let consumed = false
     for (const action of actions) {
       this.presses.set(action, (this.presses.get(action) ?? 0) + 1)
+      // 한 키에 여러 액션이 묶여 있을 때(Escape = cancel/back/pause) 누군가 소비하면 나머지 액션은 알리지 않는다.
+      // 폴링용 presses 는 전부 센다.
+      if (consumed) continue
       const subs = this.subs.get(action)
       if (subs) {
         for (const s of subs) {

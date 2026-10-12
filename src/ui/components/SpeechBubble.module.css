@@ -1,0 +1,63 @@
+.bubble {
+  position: relative;
+  width: 100%;
+  min-height: calc(2 * var(--lh-body) + 2 * var(--sp-2));
+  margin-bottom: var(--sp-4); /* 꼬리(테두리 1u + 3u) 공간 */
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--bg-2);
+  color: var(--text-0);
+  text-align: center;
+  word-break: keep-all;
+  box-shadow:
+    0 calc(-1 * var(--u)) 0 0 var(--accent),
+    0 var(--u) 0 0 var(--accent),
+    calc(-1 * var(--u)) 0 0 0 var(--accent),
+    var(--u) 0 0 0 var(--accent);
+}
+.bubble[data-visible='false'] {
+  visibility: hidden;
+}
+
+/* 꼬리: 1u 픽셀을 box-shadow 로 쌓는다. 본체 픽셀이 아래 테두리를 뚫고, 그 밑으로 5→3→1 폭 삼각형 */
+.bubble::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: calc(-1 * var(--u));
+  width: var(--u);
+  height: var(--u);
+  margin-left: calc(-0.5 * var(--u));
+  background: var(--bg-2);
+  box-shadow:
+    calc(-1 * var(--u)) 0 0 0 var(--bg-2),
+    var(--u) 0 0 0 var(--bg-2),
+    calc(-2 * var(--u)) var(--u) 0 0 var(--accent),
+    calc(-1 * var(--u)) var(--u) 0 0 var(--bg-2),
+    0 var(--u) 0 0 var(--bg-2),
+    var(--u) var(--u) 0 0 var(--bg-2),
+    calc(2 * var(--u)) var(--u) 0 0 var(--accent),
+    calc(-1 * var(--u)) calc(2 * var(--u)) 0 0 var(--accent),
+    0 calc(2 * var(--u)) 0 0 var(--bg-2),
+    var(--u) calc(2 * var(--u)) 0 0 var(--accent),
+    0 calc(3 * var(--u)) 0 0 var(--accent);
+}
+
+.text {
+  display: block;
+  animation: bubble-in 120ms steps(2, jump-end);
+}
+
+@keyframes bubble-in {
+  from {
+    translate: 0 var(--sp-2);
+    opacity: 0;
+  }
+  to {
+    translate: 0 0;
+    opacity: 1;
+  }
+}
+
+html[data-motion='reduce'] .text {
+  animation: none;
+}

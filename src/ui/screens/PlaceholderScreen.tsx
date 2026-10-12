@@ -1,5 +1,3 @@
-import { useEffect } from 'react'
-import { input } from '@/app/input/input'
 import { useStore } from '@/app/store'
 import { MenuList } from '@/ui/components/MenuList'
 import styles from './PlaceholderScreen.module.css'
@@ -12,7 +10,7 @@ interface Props {
 /** 아직 구현되지 않은 화면의 자리 표시 — 화면 상태 머신/전환/Esc 동작 검증용 */
 export function PlaceholderScreen({ title, note }: Props) {
   const back = useStore((s) => s.back)
-  useEffect(() => input.on('back', () => (back(), true), { scope: 'ui' }), [back])
+  // Esc 는 MenuList 의 onCancel 이 처리 (back 액션까지 구독하면 한 키에 두 번 실행된다)
 
   return (
     <main className={styles.screen}>
