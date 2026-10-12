@@ -111,6 +111,8 @@ Node 20 이상. React 19 · Vite 8 · TypeScript · zustand · Galmuri 폰트.
 
 개발 빌드 전용 진입점: `#dev/gallery`(표정 전체) · `#dev/tokens`(디자인 토큰) · `#go/<title|select|lobby|records|settings>`(화면 바로 열기) · `?touch=1`(터치 바 강제 표시).
 
+호스트 연결 확인용 **샘플 게임**은 기본으로 숨겨져 있습니다. 설정의 **개발자 모드**를 켜거나 타이틀 화면에서 `d` `e` `v`를 차례로 치면 로비와 기록에 나타납니다.
+
 ## 조작
 
 | 키                | 메뉴                        | 지뢰찾기                                     | 테트리스                              | 오목                                 | 스네이크                  |

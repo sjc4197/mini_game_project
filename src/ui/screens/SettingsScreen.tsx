@@ -51,7 +51,7 @@ export function SettingsScreen() {
   )
 
   const rows = useMemo<Row[]>(() => {
-    const toggle = (key: 'sound' | 'crt') => () => set({ [key]: !settings[key] })
+    const toggle = (key: 'sound' | 'crt' | 'devMode') => () => set({ [key]: !settings[key] })
     const onOff = (v: boolean) => (v ? 'ON' : 'OFF')
     return [
       {
@@ -65,8 +65,13 @@ export function SettingsScreen() {
         id: 'volume',
         label: '볼륨',
         value: `${Math.round(settings.volume * 100)}%`,
-        step: (d) => set({ volume: Math.min(1, Math.max(0, Math.round(settings.volume * 10 + d) / 10)) }),
-        activate: () => set({ volume: settings.volume >= 1 ? 0.1 : Math.min(1, Math.round(settings.volume * 10 + 1) / 10) }),
+        step: (d) =>
+          set({ volume: Math.min(1, Math.max(0, Math.round(settings.volume * 10 + d) / 10)) }),
+        activate: () =>
+          set({
+            volume:
+              settings.volume >= 1 ? 0.1 : Math.min(1, Math.round(settings.volume * 10 + 1) / 10),
+          }),
       },
       {
         id: 'crt',
@@ -101,16 +106,48 @@ export function SettingsScreen() {
         label: '테트리스 DAS',
         value: `${settings.tetris.das}ms`,
         hint: '좌우 이동 시작 지연',
-        step: (d) => set({ tetris: { ...settings.tetris, das: cycle(DAS_STEPS, nearest(DAS_STEPS, settings.tetris.das), d) } }),
-        activate: () => set({ tetris: { ...settings.tetris, das: cycle(DAS_STEPS, nearest(DAS_STEPS, settings.tetris.das), 1) } }),
+        step: (d) =>
+          set({
+            tetris: {
+              ...settings.tetris,
+              das: cycle(DAS_STEPS, nearest(DAS_STEPS, settings.tetris.das), d),
+            },
+          }),
+        activate: () =>
+          set({
+            tetris: {
+              ...settings.tetris,
+              das: cycle(DAS_STEPS, nearest(DAS_STEPS, settings.tetris.das), 1),
+            },
+          }),
       },
       {
         id: 'arr',
         label: '테트리스 ARR',
         value: settings.tetris.arr === 0 ? '0ms (즉시)' : `${settings.tetris.arr}ms`,
         hint: '좌우 연속 이동 간격',
-        step: (d) => set({ tetris: { ...settings.tetris, arr: cycle(ARR_STEPS, nearest(ARR_STEPS, settings.tetris.arr), d) } }),
-        activate: () => set({ tetris: { ...settings.tetris, arr: cycle(ARR_STEPS, nearest(ARR_STEPS, settings.tetris.arr), 1) } }),
+        step: (d) =>
+          set({
+            tetris: {
+              ...settings.tetris,
+              arr: cycle(ARR_STEPS, nearest(ARR_STEPS, settings.tetris.arr), d),
+            },
+          }),
+        activate: () =>
+          set({
+            tetris: {
+              ...settings.tetris,
+              arr: cycle(ARR_STEPS, nearest(ARR_STEPS, settings.tetris.arr), 1),
+            },
+          }),
+      },
+      {
+        id: 'devMode',
+        label: '개발자 모드',
+        value: onOff(settings.devMode),
+        hint: '샘플 게임 보기',
+        step: toggle('devMode'),
+        activate: toggle('devMode'),
       },
       { id: 'controls', label: '조작키 보기', activate: () => openOverlay('controls') },
       { id: 'reset', label: '기록 초기화', activate: () => openOverlay('reset') },
@@ -149,7 +186,13 @@ export function SettingsScreen() {
   return (
     <main className={styles.screen}>
       <header className={styles.header}>
-        <PixelButton size="small" tabIndex={-1} sfx={false} onMouseDown={(e) => e.preventDefault()} onClick={() => (audio.play('back'), back())}>
+        <PixelButton
+          size="small"
+          tabIndex={-1}
+          sfx={false}
+          onMouseDown={(e) => e.preventDefault()}
+          onClick={() => (audio.play('back'), back())}
+        >
           ◀ 뒤로
         </PixelButton>
         <h1 className="t-h1">설정</h1>
@@ -203,7 +246,9 @@ export function SettingsScreen() {
         ))}
       </ul>
 
-      <footer className={`t-small ${styles.foot}`}>↑↓ 항목 · ←→ 값 · Enter 토글/실행 · Esc 뒤로 · 바꾸는 즉시 저장</footer>
+      <footer className={`t-small ${styles.foot}`}>
+        ↑↓ 항목 · ←→ 값 · Enter 토글/실행 · Esc 뒤로 · 바꾸는 즉시 저장
+      </footer>
 
       {overlay === 'controls' && <ControlsOverlay onClose={closeOverlay} />}
       {overlay === 'reset' && (

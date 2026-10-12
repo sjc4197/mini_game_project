@@ -66,3 +66,8 @@
 .link:hover {
   color: var(--text-0);
 }
+
+/* 개발자 모드 표시 / 토글 안내 */
+.dev {
+  color: var(--accent-text);
+}

@@ -35,8 +35,14 @@ export function RecordsScreen({ screen }: { screen: RecordsScreenState }) {
   const back = useStore((s) => s.back)
   const records = useStore((s) => s.records)
   const resetRecords = useStore((s) => s.resetRecords)
-  const games = useMemo(() => listGames(), [])
-  const [tab, setTab] = useState(() => Math.max(0, games.findIndex((g) => g.id === screen.gameId)))
+  const devMode = useStore((s) => s.settings.devMode)
+  const games = useMemo(() => listGames(devMode), [devMode])
+  const [tab, setTab] = useState(() =>
+    Math.max(
+      0,
+      games.findIndex((g) => g.id === screen.gameId),
+    ),
+  )
   const [confirming, setConfirming] = useState(false)
   const game: GameModule | undefined = games[tab]
   const difficulties = game?.difficulties ?? []
@@ -82,7 +88,8 @@ export function RecordsScreen({ screen }: { screen: RecordsScreenState }) {
 
   const diffIndex = Math.min(index, Math.max(0, difficulties.length - 1))
   const difficulty = difficulties[diffIndex]
-  const entry: RecordEntry | undefined = game && difficulty ? records[game.id]?.[difficulty.id] : undefined
+  const entry: RecordEntry | undefined =
+    game && difficulty ? records[game.id]?.[difficulty.id] : undefined
   const winRate = entry && entry.plays > 0 ? Math.round((entry.wins / entry.plays) * 100) : 0
 
   return (
@@ -208,7 +215,9 @@ export function RecordsScreen({ screen }: { screen: RecordsScreenState }) {
           뒤로<span className={`t-small ${styles.key}`}>Esc</span>
         </PixelButton>
       </div>
-      <footer className={`t-small ${styles.hint}`}>←→ 게임 · ↑↓ 난이도 · Enter 실행 · Esc 뒤로</footer>
+      <footer className={`t-small ${styles.hint}`}>
+        ←→ 게임 · ↑↓ 난이도 · Enter 실행 · Esc 뒤로
+      </footer>
 
       {confirming && game && (
         <ConfirmOverlay

@@ -109,7 +109,7 @@ type Screen = { kind:'boot' } | { kind:'title' } | { kind:'select' } | { kind:'l
 ```
 - `screen`은 저장하지 않음 → 새로고침하면 항상 부트→타이틀.
 - 전환은 **커튼 방식**: `#fx` 오버레이(`--ink`)가 화면을 덮으면 그 순간 화면을 교체하고 걷음. `fade`(180ms `steps(4)`, 기본) / `wipe`(`clip-path inset` 240ms `steps(8)`, 게임 시작 시). 전환 중 클릭 차단, 연속 `navigate`는 닫힘 시점의 최신 목적지로 1회 교체. reduced-motion은 1ms(animationend 보장) + setTimeout 폴백.
-- 흐름: 부트(폰트 대기) → 타이틀 → (저장 캐릭터 없으면) 선택 → 로비 → (난이도 피커) → 게임 → 결과 → 로비. 로비에서 기록(R)/설정(S)/캐릭터 변경(Esc). `Esc` = `parentOf()`.
+- 흐름: 부트(폰트 대기) → 타이틀 → 캐릭터 선택(저장된 고양이에 포커스, 매번 거친다) → 로비 → (난이도 피커) → 게임 → 결과 → 로비. 로비에서 기록(R)/설정(S)/캐릭터 변경(Esc). `Esc` = `parentOf()`.
 
 ### 1.3 상태 — zustand 5 (+ persist, subscribeWithSelector)
 

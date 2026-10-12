@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { LOBBY_SLOTS, UPCOMING, lobbyEntries } from './registry'
+import { LOBBY_SLOTS, UPCOMING, listGames, lobbyEntries } from './registry'
 import type { GameModule } from './types'
 
 const stub = (id: string, devOnly = false): GameModule => ({
@@ -16,6 +16,14 @@ const stub = (id: string, devOnly = false): GameModule => ({
   create: () => {
     throw new Error('stub')
   },
+})
+
+describe('listGames', () => {
+  it('기본은 devOnly(샘플) 제외, 개발자 모드면 포함', () => {
+    expect(listGames().some((g) => g.devOnly)).toBe(false)
+    expect(listGames(true).some((g) => g.devOnly)).toBe(true)
+    expect(listGames().map((g) => g.id)).toEqual(['minesweeper', 'tetris', 'omok', 'snake'])
+  })
 })
 
 describe('lobbyEntries', () => {

@@ -1,22 +1,27 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { audio } from '@/app/audio/audio'
 import { input } from '@/app/input/input'
 import { useStore } from '@/app/store'
-import { CHARACTERS, findCharacter, getCharacterClips } from '@/characters'
+import { CHARACTERS, getCharacterClips } from '@/characters'
 import { PixelSprite } from '@/ui/components/PixelSprite'
 import styles from './TitleScreen.module.css'
 
 const VERSION = 'v0.1'
+/** 타이틀에서 이 글자를 차례로 치면 개발자 모드 토글 (샘플 게임 표시) */
+const DEV_WORD = 'dev'
+const TOAST_MS = 2000
 
 export function TitleScreen() {
   const navigate = useStore((s) => s.navigate)
   const selectedId = useStore((s) => s.selectedCharacterId)
+  const devMode = useStore((s) => s.settings.devMode)
+  const [toast, setToast] = useState<string | null>(null)
 
-  // 저장된 캐릭터가 있으면 로비로, 없으면 캐릭터 선택으로
+  // 시작하면 항상 캐릭터 선택으로 (저장된 고양이에 포커스가 가 있다)
   const start = useCallback(() => {
     audio.play('confirm')
-    navigate(findCharacter(selectedId) ? { kind: 'lobby' } : { kind: 'select' })
-  }, [navigate, selectedId])
+    navigate({ kind: 'select' })
+  }, [navigate])
   const openSettings = useCallback(() => navigate({ kind: 'settings', from: 'title' }), [navigate])
   const openRecords = useCallback(() => navigate({ kind: 'records' }), [navigate])
 
@@ -28,6 +33,29 @@ export function TitleScreen() {
     ]
     return () => offs.forEach((off) => off())
   }, [start, openSettings, openRecords])
+
+  // 키워드 'dev' 입력 → 개발자 모드 토글
+  useEffect(() => {
+    let typed = ''
+    let timer: ReturnType<typeof setTimeout> | null = null
+    const onKey = (e: KeyboardEvent): void => {
+      if (e.repeat || !/^Key[A-Z]$/.test(e.code)) return
+      typed = (typed + e.code.slice(3).toLowerCase()).slice(-DEV_WORD.length)
+      if (typed !== DEV_WORD) return
+      typed = ''
+      const next = !useStore.getState().settings.devMode
+      useStore.getState().updateSettings({ devMode: next })
+      audio.play(next ? 'levelup' : 'back')
+      setToast(`개발자 모드 ${next ? 'ON' : 'OFF'}`)
+      if (timer) clearTimeout(timer)
+      timer = setTimeout(() => setToast(null), TOAST_MS)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      if (timer) clearTimeout(timer)
+    }
+  }, [])
 
   const goDev = (page: 'tokens' | 'gallery') => {
     location.hash = `#dev/${page}`
@@ -72,6 +100,11 @@ export function TitleScreen() {
               DEV 토큰
             </button>
           </>
+        )}
+        {(toast || devMode) && (
+          <span className={styles.dev} role="status">
+            {toast ?? '개발자 모드'}
+          </span>
         )}
       </footer>
     </main>

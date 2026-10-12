@@ -7,7 +7,7 @@ import { useSession } from '@/app/session'
 import { useStore, type GameRecords } from '@/app/store'
 import { getCharacter } from '@/characters'
 import type { LineKey } from '@/characters/types'
-import { lobbyEntries, type LobbyEntry } from '@/games/registry'
+import { listGames, lobbyEntries, type LobbyEntry } from '@/games/registry'
 import type { GameModule } from '@/games/types'
 import { DifficultyPicker } from '@/ui/components/DifficultyPicker'
 import { MascotPanel } from '@/ui/components/MascotPanel'
@@ -33,10 +33,11 @@ export function LobbyScreen() {
   const back = useStore((s) => s.back)
   const records = useStore((s) => s.records)
   const selectedId = useStore((s) => s.selectedCharacterId)
+  const devMode = useStore((s) => s.settings.devMode)
   const character = getCharacter(selectedId)
   const mood = useSession((s) => s.mood)
   const line = useSession((s) => s.line)
-  const [entries] = useState(() => lobbyEntries())
+  const [entries] = useState(() => lobbyEntries(listGames(devMode)))
   const [shaking, setShaking] = useState<string | null>(null)
   const [picking, setPicking] = useState<GameModule | null>(null)
   const reactor = useRef<MascotReactor | null>(null)

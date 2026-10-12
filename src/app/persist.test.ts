@@ -13,6 +13,8 @@ describe('sanitizeSettings', () => {
     expect(sanitizeSettings(undefined)).toEqual(DEFAULT_SETTINGS)
     expect(sanitizeSettings('garbage')).toEqual(DEFAULT_SETTINGS)
     expect(sanitizeSettings({ sound: 'yes', volume: 'loud', uiScale: 7 })).toEqual(DEFAULT_SETTINGS)
+    expect(sanitizeSettings({ devMode: 'yes' }).devMode).toBe(false)
+    expect(sanitizeSettings({ devMode: true }).devMode).toBe(true)
   })
   it('부분 객체는 누락 키를 기본값으로 메운다 (중첩 tetris 포함)', () => {
     const s = sanitizeSettings({ crt: true, tetris: { das: 100 } })

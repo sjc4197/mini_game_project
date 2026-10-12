@@ -23,6 +23,8 @@ export interface Settings {
   chatter: Chatter
   reducedMotion: 'system' | 'on'
   tetris: { das: number; arr: number }
+  /** 개발자 모드: 샘플 게임(호스트 연결 확인용)을 로비·기록에 표시 */
+  devMode: boolean
 }
 
 export interface RecordBest {

@@ -20,7 +20,8 @@ export function getGame(id: string): GameModule | undefined {
   return GAMES.find((g) => g.id === id)
 }
 
-export function listGames(includeDev: boolean = import.meta.env.DEV): GameModule[] {
+/** 로비·기록에 보일 게임. devOnly 모듈(샘플)은 개발자 모드 설정이 켜졌을 때만 */
+export function listGames(includeDev = false): GameModule[] {
   return GAMES.filter((g) => includeDev || !g.devOnly)
 }
 

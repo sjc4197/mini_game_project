@@ -12,6 +12,7 @@ export const DEFAULT_SETTINGS: Settings = {
   chatter: 'normal',
   reducedMotion: 'system',
   tetris: { das: 167, arr: 33 },
+  devMode: false,
 }
 
 export const DEFAULT_PERSISTED: PersistedState = {
@@ -85,6 +86,7 @@ export function sanitizeSettings(raw: unknown): Settings {
       das: num(t.das, d.tetris.das, 0, 500),
       arr: num(t.arr, d.tetris.arr, 0, 200),
     },
+    devMode: bool(r.devMode, d.devMode),
   }
 }
 
