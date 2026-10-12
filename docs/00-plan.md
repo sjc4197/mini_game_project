@@ -365,7 +365,7 @@ interface GameHost {
 | 13 | 테트리스 ② 렌더·입력·루프 | `tetris/{render,input,index}.ts` | 60fps, DAS/ARR 체감, 벽킥·홀드·하드드롭·고스트·Next, 일시정지 중 정지 |
 | 14 | 테트리스 ③ 마스코트·기록·폴리시 | 클리어/레벨업/게임오버 연출, 마스코트 매핑, 하이스코어, SFX | "테트리스!" + 전용 음, 위험 높이 worried, 기록 반영 |
 | 15 | 반응형·터치 + README + 마무리 | narrow 스트립 레이아웃, 테트리스 가상 버튼(DOM→input 주입), 지뢰찾기 탭/길게 눌러 깃발 + 토글, `favicon.svg`, README, 서브셋 폰트(여유 시), `npm run build && preview` | <960px에서 스트립, 모바일 폭에서 플레이 가능, 빌드 성공 |
-| 16–20 | 추가 게임: 오목(2인 대전 · 컴퓨터) + 스네이크 | 단계 표와 설계는 `docs/04-extra-games.md` | 문서 참조 |
+| 16–20 | 추가 게임: 오목(2인 대전 · 컴퓨터) + 스네이크 — 완료 | 단계 표와 설계는 `docs/04-extra-games.md` | 로비 4게임, 기록 탭 4개, 테스트 221개, 빌드 2.8MB |
 
 - 단계 중 발견된 버그는 그 단계에서 수정. 단계가 커지면 보고 후 분할.
   - 15단계 구현 노트(2026-10-12): 좁은 화면(<960px)은 HUD 2줄 + 마스코트 스트립(1u 고양이 + 한 줄 말풍선 + BEST) + 보드 + 터치 바, 키보드 힌트는 숨김. 터치 바는 `GameModule.touchControls`(키 버튼 = InputService 에 keydown/keyup 주입, 토글 = `GameInstance.setOption`)로 게임이 선언. 지뢰찾기 터치: 탭 열기 · 350ms 길게 깃발(+진동) · 깃발 모드 토글. DEV `?touch=1` 로 강제 표시. 폰트 서브셋은 하지 않음(2.7MB woff2 그대로).
