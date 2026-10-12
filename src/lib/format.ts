@@ -12,6 +12,15 @@ export function formatClockTenths(ms: number): string {
   return `${formatClock(ms)}.${tenths}`
 }
 
+/** epoch ms → 'YYYY.MM.DD' (로컬) */
+export function formatDate(ms: number): string {
+  const d = new Date(ms)
+  if (Number.isNaN(d.getTime())) return '—'
+  const mm = String(d.getMonth() + 1).padStart(2, '0')
+  const dd = String(d.getDate()).padStart(2, '0')
+  return `${d.getFullYear()}.${mm}.${dd}`
+}
+
 /** 1234567 → '1,234,567' */
 export function formatNumber(n: number): string {
   return Math.round(n).toLocaleString('en-US')

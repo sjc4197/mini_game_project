@@ -12,6 +12,7 @@ import {
 } from './index'
 import { DOTS, SPARKLE_A, SPARKLE_B, SWEAT } from './extras'
 import { FACES, FACE_KEYS } from './faces'
+import { characterIcon } from './icon'
 import { overlongLines } from './lines'
 
 describe('스프라이트 정의 검증', () => {
@@ -34,6 +35,7 @@ describe('스프라이트 정의 검증', () => {
       }
       for (const p of ['face', 'side', 'head', 'think'] as const)
         expect(c.body.points[p]).toBeDefined()
+      expect(validateSprite(characterIcon(c)), `${c.id} icon`).toEqual([])
       // 얼굴 타일이 몸통 안에 들어가야 한다
       const f = c.body.points.face
       expect(f.x).toBeGreaterThanOrEqual(0)

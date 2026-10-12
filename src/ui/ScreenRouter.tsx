@@ -8,7 +8,7 @@ import { BootScreen } from './screens/BootScreen'
 import { CharacterSelectScreen } from './screens/CharacterSelectScreen'
 import { GameScreen } from './screens/GameScreen'
 import { LobbyScreen } from './screens/LobbyScreen'
-import { PlaceholderScreen } from './screens/PlaceholderScreen'
+import { RecordsScreen } from './screens/RecordsScreen'
 import { SettingsScreen } from './screens/SettingsScreen'
 import { TitleScreen } from './screens/TitleScreen'
 
@@ -37,7 +37,7 @@ function ScreenView({ screen }: { screen: Screen }) {
     case 'game':
       return <GameScreen screen={screen} />
     case 'records':
-      return <PlaceholderScreen title="기록" note="11단계에서 구현" />
+      return <RecordsScreen screen={screen} />
     case 'settings':
       return <SettingsScreen />
     case 'dev': {
