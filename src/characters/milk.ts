@@ -1,8 +1,18 @@
 import { ACCENTS } from '@/pixel/palette'
-import { catBody } from './template'
+import { recolorFaces } from './faces'
+import { catBody, catLoaf, chinShadow, replaceAll } from './template'
 import type { CharacterDef } from './types'
 
-/** 우유 — 새하얀 고양이. 무늬 없음, 분홍 귀 속 */
+/** 우유 — 새하얀 고양이. 줄무늬를 지우고 턱 아래 그림자만 남김, 분홍 귀 속 */
+const PALETTE = {
+  k: '#2E2A33',
+  r: '#FBF6EC',
+  s: '#EDE5D5',
+  b: '#E9E1D2',
+  c: '#FFFFFF',
+  p: '#FFB3C0',
+} as const
+
 export const milk: CharacterDef = {
   id: 'milk',
   name: '우유',
@@ -10,8 +20,10 @@ export const milk: CharacterDef = {
   personality: '수줍음, 다정함',
   specialty: '응원',
   accent: ACCENTS.milk,
-  body: catBody('milk.body', { k: '$ink', r: '#FBF6EC', t: '#FBF6EC', f: '#FBF6EC', p: '#FF9DA6' }),
-  idle: { kind: 'squash', row: 24 },
+  body: catBody('milk.body', PALETTE, (rows) => chinShadow(replaceAll(rows, 'd', 'r'))),
+  loaf: catLoaf('milk.loaf', PALETTE, (rows) => replaceAll(rows, 'd', 'r')),
+  idle: { kind: 'squash', row: 27 },
+  faces: recolorFaces('milk', { e: '#2E2A33', k: '#2E2A33', p: '#FFB3C0' }),
   lines: {
     'ui.idle': ['…안녕. 여기 있을게.', '(살짝 손 흔듦)', '오늘도 같이 놀자.'],
     'ui.lobby.hover': ['뭐든 좋아… 네가 고른 거면.', '천천히 골라도 돼.'],

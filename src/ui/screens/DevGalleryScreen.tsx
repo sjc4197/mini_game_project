@@ -17,6 +17,7 @@ const MOOD_LABEL: Record<Mood, string> = {
   sad: 'sad 슬픔',
   win: 'win 승리',
   think: 'think 생각',
+  loaf: 'loaf 식빵',
 }
 
 const LINE_KEYS: LineKey[] = [
@@ -97,10 +98,9 @@ export default function DevGalleryScreen() {
       </header>
 
       <section className={styles.section}>
-        <h2 className={`t-h2 ${styles.sectionTitle}`}>전체 보기 — 4캐릭터 × 6무드 (2u, 애니)</h2>
+        <h2 className={`t-h2 ${styles.sectionTitle}`}>전체 보기 — 4캐릭터 × 7무드 (2u, 애니)</h2>
         <div className={`t-small ${styles.muted}`}>
-          --u {m.u}px · DPR {m.dpr} · 1dp = {m.uDevice} device px · 오리지널 앉은 뚱냥이 템플릿:
-          둥근 머리·허리 들어간 몸, 점 눈·ω 입·볼터치, 앞발 둘, 말린 꼬리, 숨쉬기/깜빡임
+          --u {m.u}px · DPR {m.dpr} · 1dp = {m.uDevice} device px · 사용자 도안(docs/art/cat-design-walk.png) 걷는 포즈 42×39 템플릿: 4×4 눈·분홍 코·ω 입은 얼굴 타일 15×9, 스테이지 42×43, 숨쉬기/깜빡임
         </div>
         <div className={styles.charRow}>
           <div />

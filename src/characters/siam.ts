@@ -1,9 +1,19 @@
 import { ACCENTS } from '@/pixel/palette'
 import { recolorFaces } from './faces'
-import { catBody, paintRect } from './template'
+import { catBody, catLoaf, chinShadow, paintRect, replaceAll } from './template'
 import type { CharacterDef } from './types'
 
-/** 샴 — 크림색 몸에 초콜릿 포인트(귀·얼굴 마스크·꼬리·앞발), 파란 눈 */
+/** 샴 — 크림색 몸에 초콜릿 포인트(귀·얼굴 마스크·꼬리·네 발), 파란 눈. 줄무늬 없음 */
+const PALETTE = {
+  k: '#3B2A22',
+  r: '#F3E3C3',
+  s: '#E6D3AE',
+  b: '#DEC9A0',
+  c: '#FBF0DD',
+  p: '#D8938A',
+  m: '#6B4A3A',
+} as const
+
 export const siam: CharacterDef = {
   id: 'siam',
   name: '샴',
@@ -11,19 +21,26 @@ export const siam: CharacterDef = {
   personality: '도도한 츤데레, 늘 졸림',
   specialty: '낮잠',
   accent: ACCENTS.siam,
-  body: catBody(
-    'siam.body',
-    { k: '$ink', r: '#F3E3C3', t: '#6B4A3A', f: '#6B4A3A', m: '#6B4A3A', p: '#6B4A3A' },
-    (rows) => {
-      let r = paintRect(rows, 6, 2, 25, 6, 'r', 'm') // 귀
-      r = paintRect(r, 10, 11, 21, 11, 'r', 'm') // 얼굴 마스크 (타원)
-      r = paintRect(r, 9, 12, 22, 14, 'r', 'm')
-      r = paintRect(r, 10, 15, 21, 15, 'r', 'm')
-      return r
-    },
-  ),
-  idle: { kind: 'squash', row: 24 },
-  faces: recolorFaces('siam', { e: '#6E9BFF', k: '#F3E3C3' }),
+  body: catBody('siam.body', PALETTE, (rows) => {
+      let r = chinShadow(replaceAll(rows, 'd', 'r'))
+      r = paintRect(r, 17, 0, 24, 8, 'r', 'm') // 왼쪽 귀
+      r = paintRect(r, 33, 0, 41, 8, 'r', 'm') // 오른쪽 귀
+      r = paintRect(r, 17, 11, 41, 21, 'rc', 'm') // 얼굴 마스크 (입가까지)
+      r = paintRect(r, 0, 6, 10, 23, 'rc', 'm') // 꼬리
+    r = paintRect(r, 0, 32, 41, 38, 'rc', 'm') // 네 발
+    return r
+  }),
+  loaf: catLoaf('siam.loaf', PALETTE, (rows) => {
+    let r = replaceAll(rows, 'd', 'r')
+    r = paintRect(r, 1, 3, 7, 9, 'r', 'm') // 왼쪽 귀
+    r = paintRect(r, 16, 3, 23, 10, 'r', 'm') // 오른쪽 귀
+    r = paintRect(r, 1, 13, 23, 23, 'rc', 'm') // 얼굴 마스크
+    r = paintRect(r, 32, 15, 45, 27, 'rcb', 'm') // 꼬리
+    r = paintRect(r, 3, 29, 17, 33, 'rc', 'm') // 앞발
+    return r
+  }),
+  idle: { kind: 'squash', row: 27 },
+  faces: recolorFaces('siam', { e: '#4F7BE8', k: '#F3E3C3', p: '#D8938A' }),
   lines: {
     'ui.idle': ['…냐암. (하품)', '날 깨운 건 너냐옹?', '달이 뜨면 깨울 것.'],
     'ui.lobby.hover': ['빨리 고르라냥. 졸리다냥.', '아무거나 해라냥.'],

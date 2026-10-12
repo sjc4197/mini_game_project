@@ -40,3 +40,32 @@ export const DOTS: readonly SpriteDef[] = [
   dots('extra.dots.2', ['ww.ww...', 'ww.ww...']),
   dots('extra.dots.3', ['ww.ww.ww', 'ww.ww.ww']),
 ]
+
+const steam = (id: string, rows: readonly string[]): SpriteDef => ({
+  id,
+  w: 24,
+  h: 7,
+  palette: { c: '#F9DDB5' },
+  rows,
+})
+
+/** 식빵 위로 올라가는 김 세 줄기 — A/B 를 번갈아 흔들림 */
+export const STEAM_A: SpriteDef = steam('extra.steam.a', [
+  '...c........c.......c...',
+  '..c........c.........c..',
+  '..c........c.........c..',
+  '...c........c.......c...',
+  '....c........c.....c....',
+  '....c........c.....c....',
+  '...c........c.......c...',
+])
+
+export const STEAM_B: SpriteDef = steam('extra.steam.b', [
+  '....c........c.....c....',
+  '...c........c.......c...',
+  '..c........c.........c..',
+  '..c........c.........c..',
+  '...c........c.......c...',
+  '....c........c.....c....',
+  '....c........c.....c....',
+])

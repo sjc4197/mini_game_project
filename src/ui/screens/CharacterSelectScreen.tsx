@@ -81,7 +81,7 @@ export function CharacterSelectScreen() {
 
         <section className={`panel ${styles.preview}`} aria-live="polite">
           <div className={styles.previewSprite}>
-            <Mascot character={focused} mood="idle" scaleU={3} animate />
+            <Mascot character={focused} mood="idle" scaleU={2} animate />
           </div>
           <h2 className={`t-h1 ${styles.name}`}>{focused.name}</h2>
           <p className={`t-body ${styles.bio}`}>“{focused.bio}”</p>

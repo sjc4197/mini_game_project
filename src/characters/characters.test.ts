@@ -21,56 +21,59 @@ describe('스프라이트 정의 검증', () => {
       expect(validateSprite(s), s.id).toEqual([])
   })
   it.each(CHARACTERS.map((c) => [c.id, c] as const))(
-    '%s: 몸통 24×24, 오버라이드 얼굴, 기준점',
+    '%s: 몸통 42×39, 오버라이드 얼굴 15×9, 기준점',
     (_id, c) => {
-      expect(c.body.w).toBe(32)
-      expect(c.body.h).toBe(32)
+      expect(c.body.w).toBe(42)
+      expect(c.body.h).toBe(39)
       expect(validateSprite(c.body)).toEqual([])
+      expect([c.loaf.w, c.loaf.h]).toEqual([46, 34])
+      expect(validateSprite(c.loaf)).toEqual([])
       for (const [key, face] of Object.entries(c.faces ?? {})) {
         expect(validateSprite(face!), `${c.id} face ${key}`).toEqual([])
-        expect([face!.w, face!.h]).toEqual([16, 6])
+        expect([face!.w, face!.h]).toEqual([15, 9])
       }
       for (const p of ['face', 'side', 'head', 'think'] as const)
         expect(c.body.points[p]).toBeDefined()
       // 얼굴 타일이 몸통 안에 들어가야 한다
       const f = c.body.points.face
       expect(f.x).toBeGreaterThanOrEqual(0)
-      expect(f.x + 16).toBeLessThanOrEqual(32)
-      expect(f.y + 6).toBeLessThanOrEqual(32)
+      expect(f.x + 15).toBeLessThanOrEqual(42)
+      expect(f.y + 9).toBeLessThanOrEqual(39)
     },
   )
 })
 
 describe('클립 합성', () => {
   it.each(CHARACTERS.map((c) => [c.id, c] as const))(
-    '%s: 무드 6종, 32×32, 프레임 수/fps',
+    '%s: 무드 7종, 46×43 프레임, 프레임 수/fps',
     (_id, c) => {
       const clips = buildCharacterClips(c)
       for (const mood of MOODS) {
         const clip = clips[mood]
         expect(clip.frames.length, mood).toBeGreaterThanOrEqual(2)
         for (const f of clip.frames) {
-          expect([f.w, f.h]).toEqual([32, 36])
+          expect([f.w, f.h]).toEqual([46, 43])
           expect(f.colors.length).toBeGreaterThan(2)
         }
       }
       expect(clips.idle.frames).toHaveLength(8)
       expect(clips.think.frames).toHaveLength(3)
+      expect(clips.loaf.frames).toHaveLength(4)
       expect(clips.idle.fps).toBe(2)
     },
   )
   it('idle 2번째 포즈(squash): 발(마지막 행)은 고정, 귀 끝은 1dp 내려온다', () => {
     const frames = buildCharacterClips(getCharacter('cheese')).idle.frames
     const row = (r: (typeof frames)[number], y: number) =>
-      Array.from(r.data.subarray(y * 32, y * 32 + 32))
-    expect(row(frames[1]!, 35)).toEqual(row(frames[0]!, 35))
+      Array.from(r.data.subarray(y * 46, y * 46 + 46))
+    expect(row(frames[1]!, 42)).toEqual(row(frames[0]!, 42))
     expect(row(frames[1]!, 7)).toEqual(row(frames[0]!, 6))
   })
-  it('털색은 캐릭터마다 다르고 외곽선(잉크)은 공통', () => {
+  it('털색은 캐릭터마다 다르고, 프레임에 그 캐릭터의 외곽선 색이 들어간다', () => {
     const fills = new Set<string>()
     for (const c of CHARACTERS) {
       const f = buildCharacterClips(c).idle.frames[0]!
-      expect(f.colors).toContain('#0D1020')
+      expect(f.colors).toContain((c.body.palette.k as string).toUpperCase())
       fills.add(c.body.palette.r as string)
     }
     expect(fills.size).toBe(CHARACTERS.length)
@@ -78,7 +81,7 @@ describe('클립 합성', () => {
   it('faceOf: 오버라이드가 있으면 그것, 없으면 공용', () => {
     expect(faceOf(getCharacter('siam'), 'idle').id).toBe('siam.face.idle')
     expect(faceOf(getCharacter('cheese'), 'sad').id).toBe('face.sad')
-    expect(faceOf(getCharacter('milk'), 'win').id).toBe('face.win')
+    expect(faceOf(getCharacter('milk'), 'win').id).toBe('milk.face.win')
   })
 })
 

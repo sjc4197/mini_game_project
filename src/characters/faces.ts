@@ -2,81 +2,104 @@ import type { SpriteDef } from '@/pixel/types'
 import type { FaceKey } from './types'
 
 /**
- * 공용 얼굴 타일 16×6 — 머리 아래쪽에 놓인다. 작은 점 눈(2×2) 두 개를 멀리, 가운데 작은 ω 입, 눈 바깥 볼터치.
- * e 눈, k 입, p 볼, b 눈물, y 별 눈. 눈·입 색은 캐릭터가 팔레트로 바꿀 수 있다(샴).
+ * 공용 얼굴 타일 15×9 — 몸통의 CAT_POINTS.face(눈 윗줄 한 칸 위)에 놓인다.
+ * 도안 그대로: 왼쪽 눈 4×4 + 오른쪽 눈 3×4(3/4 시점), 왼쪽 위 흰 점, 분홍 코 3+1, ω 입.
+ * e 눈, w 눈 하이라이트, k 입, p 코, b 눈물, y 별 눈. 캐릭터는 recolorFaces 로 색만 바꾼다.
  */
 export const FACE_PALETTE = {
-  e: '$ink',
-  k: '$ink',
-  p: '#FF9DA6',
+  e: '#340C04',
+  k: '#340C04',
+  w: '#FFFFFF',
+  p: '#FA9B78',
   b: '#6E9BFF',
   y: '#FFD166',
 } as const
 
 const face = (key: FaceKey, rows: readonly string[]): SpriteDef => ({
   id: `face.${key}`,
-  w: 16,
-  h: 6,
+  w: 15,
+  h: 9,
   palette: FACE_PALETTE,
   rows,
 })
 
 export const FACES: Readonly<Record<FaceKey, SpriteDef>> = {
   idle: face('idle', [
-    '................',
-    '...ee......ee...',
-    'pp.ee......ee.pp',
-    '......k.k.k.....',
-    '.......k.k......',
-    '................',
+    '...............',
+    '.eeee......eee.',
+    '.ewee......ewe.',
+    '.eeee......eee.',
+    '.eeee......eee.',
+    '.......ppp.....',
+    '........p......',
+    '.....k..k..k...',
+    '......kk.kk....',
   ]),
   blink: face('blink', [
-    '................',
-    '................',
-    'pp.ee......ee.pp',
-    '......k.k.k.....',
-    '.......k.k......',
-    '................',
+    '...............',
+    '...............',
+    '...............',
+    '.eeee......eee.',
+    '...............',
+    '.......ppp.....',
+    '........p......',
+    '.....k..k..k...',
+    '......kk.kk....',
   ]),
   happy: face('happy', [
-    '....e......e....',
-    '...e.e....e.e...',
-    'pp............pp',
-    '......k.k.k.....',
-    '.......k.k......',
-    '................',
+    '...............',
+    '...............',
+    '..ee........e..',
+    '.e..e......e.e.',
+    '...............',
+    '.......ppp.....',
+    '........p......',
+    '.....k..k..k...',
+    '......kk.kk....',
   ]),
   worried: face('worried', [
-    '................',
-    '...ee......ee...',
-    'pp.ee......ee.pp',
-    '......kk.kk.....',
-    '........k.......',
-    '................',
+    '...............',
+    '..eee......ee..',
+    '.eeee......ewe.',
+    '.ewee......eee.',
+    '.eeee......eee.',
+    '.......ppp.....',
+    '........p......',
+    '......k.k.k....',
+    '.......k.k.....',
   ]),
   sad: face('sad', [
-    '................',
-    '...ee......ee...',
-    '...ee......ee...',
-    '...b..kkk..b....',
-    '...b.k...k.b....',
-    '................',
+    '...............',
+    '.eee........ee.',
+    '.eeee......eee.',
+    '.ewee......ewe.',
+    '.eeee......eee.',
+    '.b.....ppp.....',
+    '........p......',
+    '......kk.kk....',
+    '.....k..k..k...',
   ]),
   win: face('win', [
-    '....y......y....',
-    '...yyy....yyy...',
-    'pp..y......y..pp',
-    '......kkkk......',
-    '......kkkk......',
-    '................',
+    '...............',
+    '..y.........y..',
+    '.yyy.......yyy.',
+    '..y.........y..',
+    '...............',
+    '.......ppp.....',
+    '........p......',
+    '.....k.....k...',
+    '......kkkkk....',
   ]),
   think: face('think', [
-    '....ee......ee..',
-    '....ee......ee..',
-    'pp............pp',
-    '................',
-    '.......kk.......',
-    '................',
+    '.eeee......eee.',
+    '.ewee......ewe.',
+    '.eeee......eee.',
+    '.eeee......eee.',
+    '...............',
+    '.......ppp.....',
+    '........p......',
+    '......kkk......',
+    '...............',
   ]),
 }
 
@@ -90,19 +113,15 @@ export const FACE_KEYS: readonly FaceKey[] = [
   'think',
 ]
 
-/** 눈·입 색만 바꾼 얼굴 세트 (샴의 파란 눈 등) */
+/** 공용 타일의 색만 바꾼 캐릭터 전용 세트 (외곽선·눈·코 색을 몸통 팔레트에 맞출 때) */
 export function recolorFaces(
   prefix: string,
-  overrides: Partial<Record<string, string>>,
-): Record<FaceKey, SpriteDef> {
-  const out = {} as Record<FaceKey, SpriteDef>
+  overrides: Partial<Record<keyof typeof FACE_PALETTE, `#${string}`>>,
+): Partial<Record<FaceKey, SpriteDef>> {
+  const out: Partial<Record<FaceKey, SpriteDef>> = {}
   for (const key of FACE_KEYS) {
-    const f = FACES[key]
-    out[key] = {
-      ...f,
-      id: `${prefix}.${f.id}`,
-      palette: { ...f.palette, ...overrides } as SpriteDef['palette'],
-    }
+    const base = FACES[key]
+    out[key] = { ...base, id: `${prefix}.face.${key}`, palette: { ...base.palette, ...overrides } }
   }
   return out
 }

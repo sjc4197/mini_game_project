@@ -1,8 +1,17 @@
 import { ACCENTS } from '@/pixel/palette'
-import { CHEST, TABBY_STRIPES, catBody, paint } from './template'
+import { catBody, catLoaf } from './template'
 import type { CharacterDef } from './types'
 
-/** 치즈 — 주황 치즈태비. 이마·옆구리·꼬리 줄무늬, 흰 가슴 */
+/** 치즈 — 주황 치즈태비. 도안 원본 색 그대로 (주황 털, 진한 주황 줄무늬, 크림 가슴·발) */
+const PALETTE = {
+  k: '#340C04',
+  r: '#F9A94E',
+  d: '#D76C25',
+  b: '#D76C25',
+  c: '#FBE2BC',
+  p: '#FA9B78',
+} as const
+
 export const cheese: CharacterDef = {
   id: 'cheese',
   name: '치즈',
@@ -10,20 +19,9 @@ export const cheese: CharacterDef = {
   personality: '먹보, 느긋함',
   specialty: '낮잠과 간식',
   accent: ACCENTS.cheese,
-  body: catBody(
-    'cheese.body',
-    {
-      k: '$ink',
-      r: '#FFB454',
-      t: '#FFB454',
-      f: '#FFF4E0',
-      d: '#E08A2E',
-      w: '#FFF4E0',
-      p: '#FF9DA6',
-    },
-    (rows) => paint(paint(rows, TABBY_STRIPES), CHEST),
-  ),
-  idle: { kind: 'squash', row: 24 },
+  body: catBody('cheese.body', PALETTE),
+  loaf: catLoaf('cheese.loaf', PALETTE),
+  idle: { kind: 'squash', row: 27 },
   lines: {
     'ui.idle': ['냠… 간식 시간 아직이야?', '햇볕 좋다… 식빵 굽는 중.', '배 만지면 안 돼.'],
     'ui.lobby.hover': ['뭐든 좋아. 간식 걸고 하자.', '빨리 고르면 간식 줄게.'],

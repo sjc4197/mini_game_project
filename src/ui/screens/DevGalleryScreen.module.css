@@ -65,7 +65,7 @@
 /* 3단계: 캐릭터 × 무드 그리드 */
 .charRow {
   display: grid;
-  grid-template-columns: calc(70 * var(--u)) repeat(6, auto);
+  grid-template-columns: calc(70 * var(--u)) repeat(7, auto);
   align-items: center;
   gap: var(--sp-4);
   padding: var(--sp-2) 0;

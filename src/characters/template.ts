@@ -1,166 +1,76 @@
 import type { Point, SpriteDef } from '@/pixel/types'
 
 /**
- * 오리지널 "앉은 정면 뚱냥이" 템플릿 (32×32). scratchpad 의 sit-apply.cjs 가
- * 머리 타원 + 몸 타원(허리 들어감) + 귀 + 앞발 + 곡선 꼬리를 수식으로 생성하고 외곽선을 자동 계산한 결과.
- * 네 고양이가 같은 격자를 쓰고 팔레트·무늬(paint)·포인트(paintRect)만 다르다.
- *   k 외곽선  r 털  t 꼬리 털  f 앞발 털  p 귀 속  (d 줄무늬, w 가슴 패치는 paint 로)
+ * 공용 고양이 몸통 42×39 — 사용자 도안(docs/art/cat-design-walk.png 가운데 고양이, 걷는 포즈)을
+ * 11.74px 격자로 샘플링한 뒤 손으로 정리한 것.
+ * k 외곽선, r 털, d 진한 줄무늬·턱 아래 그림자, c 크림(입가·가슴·발·꼬리 끝), p 분홍(귀 안).
+ * 눈·코·입은 비워 두고 faces.ts 의 15×9 타일을 CAT_POINTS.face 에 얹는다.
  */
 export const CAT_ROWS: readonly string[] = [
-  '................................',
-  '................................',
-  '........k..............k........',
-  '.......krk............krk.......',
-  '.......kprk.kkkkkkk..krpk.......',
-  '......krpprkrrrrrrrkkrpprk......',
-  '......krrrrrrrrrrrrrrrrrkk......',
-  '.......krrrrrrrrrrrrrrrk........',
-  '.......krrrrrrrrrrrrrrrk..kk....',
-  '......krrrrrrrrrrrrrrrrrkkttkk..',
-  '......krrrrrrrrrrrrrrrrrktttttk.',
-  '......krrrrrrrrrrrrrrrrrkktttttk',
-  '......krrrrrrrrrrrrrrrrrk.kktttk',
-  '....kkkrrrrrrrrrrrrrrrrrkkk.kttk',
-  '.......krrrrrrrrrrrrrrrk....kttk',
-  '.....kkkrrrrrrrrrrrrrrrkkk..kttk',
-  '........krrrrrrrrrrrrrk.....kttk',
-  '.......krrrrrrrrrrrrrrrk....kttk',
-  '......krrrrrrrrrrrrrrrrrk...kttk',
-  '.....krrrrrrrrrrrrrrrrrrrk..kttk',
-  '.....krrrrrrrrrrrrrrrrrrrk..kttk',
-  '.....krrrrrrrrrrrrrrrrrrrk.ktttk',
-  '.....krrrrrrrrrrrrrrrrrrrkkttttk',
-  '.....krrrrrrrrrrrrrrrrrrrktttttk',
-  '.....krrrrrrrrrrrrrrrrrrrkttttk.',
-  '.....krrrrrrrrrrrrrrrrrrrkttkk..',
-  '.....krrrrrrrrrrrrrrrrrrrkkk....',
-  '......krrrrrrrrrrrrrrrrrkk......',
-  '.......kkkkkkkkkkkkkkkkk........',
-  '..........kffk....kffk..........',
-  '..........kffk....kffk..........',
-  '..........kkkk....kkkk..........',
+  '...................kk...............kkk...',
+  '..................krrk.............krrrk..',
+  '.................kddrrkk..........krrdddk.',
+  '.................kdpdrrrk........krrrdpdk.',
+  '.................kdppdrrrkkkkkkkkdrrdppdk.',
+  '.................kdpppdrrkddrdddrdkddppdk.',
+  '..kkkk...........kdppppdrrddrrddrddrdppdk.',
+  '.kcccck..........kdpppdrrrrddrdddrdrrdpdk.',
+  'kcccccck.........kdppdrrrrrrddrddrdrrrddk.',
+  'kcccccrrk........kdddrrrrrrrddrrdrdrrrrk..',
+  'kccccrrdk........kddrrrrrrrrrdrrdrrrrrrk..',
+  '.kccrrdddk.......krrrrrrrrrrrrrrrrrrrrrrk.',
+  '..krrddddk.......krrrrrrrrrrrrrrrrrrrrrrk.',
+  '...kddddrk.......kddrrrrrrrrrrrrrrrrrrrrdk',
+  '...kddrrrk.......krrddrrrrrrrrrrrrrrrrrddk',
+  '...kdrrrrk.......kdddddrrrrrrrrrrrrrrrrddk',
+  '...krrrdk........kddrrrrrrrrrrccccrrrrrrrk',
+  '...kddddk........krrrrrdrrrrccccccccrrrddk',
+  '...kddddk........kdddddrrrccccccccccccrrdk',
+  '....kddrrk.kkkkkkkkdddrrrccccccccccccccrk.',
+  '....krrrdkkddrrddrkdrrrccccccccccccccccdk.',
+  '.....krddddddrdddrdkddrrccccccccccccccdk..',
+  '.....kdddrddrrddrrddkkddcccccccccccccdk...',
+  '......kddrddrrddrrddrdkkddcccccccccdkk....',
+  '.......krrddrrddrrddrrrddddddddddkkk......',
+  '.......krrrdrrddrrrdrrrrrrdddddddk........',
+  '.......krrrrrrrdrrrrrrrrrrrrrcccck........',
+  '.......kdrrrrrrrrrrrrrrrrrrrccccrk........',
+  '.......kdddrrrrrrrrrrrrrrrrrcccckk........',
+  '.......krdddrrrdrrrrrdrrrrrrccckdkk.......',
+  '......kddrrdddrdcccccdrrddrdcckdddk.......',
+  '......krddrrrrkccccccdrdddddkkdrdrkk......',
+  '.....krrrdddrkkkkkkkkkdrrrrk.kdrrrrk......',
+  '.....krrrrddk.kdddk..kdrdddk..kdrrrck.....',
+  '.....kcrrdrk..kdddk..kdrrrrk...krccck.....',
+  '.....kcccck....kccck..krrrrk....kccck.....',
+  '.....kcccck....kccck..kcccck.....kkk......',
+  '......kkkk......kkk...kcccck..............',
+  '.......................kkkk...............',
 ]
 
-/** 얼굴 타일(16×6)·땀·반짝·생각 점의 기준점 (몸통 좌표) */
 export const CAT_POINTS: Readonly<Record<'face' | 'side' | 'head' | 'think', Point>> = {
-  face: { x: 7, y: 11 },
-  side: { x: 26, y: 3 },
-  head: { x: 1, y: 1 },
-  think: { x: 22, y: -3 },
+  face: { x: 24, y: 12 }, // 얼굴 타일 15×9: 눈 윗줄 한 칸 위
+  side: { x: 13, y: 8 }, // 땀방울 4×6: 머리 왼쪽 빈 공간
+  head: { x: 27, y: -3 }, // 반짝이 5×5: 두 귀 사이 위
+  think: { x: 34, y: -3 }, // 생각 점 8×2: 오른쪽 귀 위
 }
 
 export type Pixel = [x: number, y: number, ch: string]
 
-/** 태비 줄무늬: 이마 3 + 옆구리 좌우 2씩 + 꼬리 고리 2 */
-export const TABBY_STRIPES: readonly Pixel[] = [
-  [13, 6, 'd'],
-  [13, 7, 'd'],
-  [15, 6, 'd'],
-  [15, 7, 'd'],
-  [17, 6, 'd'],
-  [17, 7, 'd'],
-  [6, 21, 'd'],
-  [7, 21, 'd'],
-  [8, 21, 'd'],
-  [6, 24, 'd'],
-  [7, 24, 'd'],
-  [8, 24, 'd'],
-  [22, 21, 'd'],
-  [23, 21, 'd'],
-  [24, 21, 'd'],
-  [22, 24, 'd'],
-  [23, 24, 'd'],
-  [24, 24, 'd'],
-  [29, 15, 'd'],
-  [30, 15, 'd'],
-  [29, 19, 'd'],
-  [30, 19, 'd'],
-]
-
-/** 가슴 패치 (둥근 흰 털) */
-export const CHEST: readonly Pixel[] = [
-  [13, 18, 'w'],
-  [14, 18, 'w'],
-  [15, 18, 'w'],
-  [16, 18, 'w'],
-  [17, 18, 'w'],
-  [12, 19, 'w'],
-  [13, 19, 'w'],
-  [14, 19, 'w'],
-  [15, 19, 'w'],
-  [16, 19, 'w'],
-  [17, 19, 'w'],
-  [18, 19, 'w'],
-  [11, 20, 'w'],
-  [12, 20, 'w'],
-  [13, 20, 'w'],
-  [14, 20, 'w'],
-  [15, 20, 'w'],
-  [16, 20, 'w'],
-  [17, 20, 'w'],
-  [18, 20, 'w'],
-  [19, 20, 'w'],
-  [11, 21, 'w'],
-  [12, 21, 'w'],
-  [13, 21, 'w'],
-  [14, 21, 'w'],
-  [15, 21, 'w'],
-  [16, 21, 'w'],
-  [17, 21, 'w'],
-  [18, 21, 'w'],
-  [19, 21, 'w'],
-  [11, 22, 'w'],
-  [12, 22, 'w'],
-  [13, 22, 'w'],
-  [14, 22, 'w'],
-  [15, 22, 'w'],
-  [16, 22, 'w'],
-  [17, 22, 'w'],
-  [18, 22, 'w'],
-  [19, 22, 'w'],
-  [11, 23, 'w'],
-  [12, 23, 'w'],
-  [13, 23, 'w'],
-  [14, 23, 'w'],
-  [15, 23, 'w'],
-  [16, 23, 'w'],
-  [17, 23, 'w'],
-  [18, 23, 'w'],
-  [19, 23, 'w'],
-  [11, 24, 'w'],
-  [12, 24, 'w'],
-  [13, 24, 'w'],
-  [14, 24, 'w'],
-  [15, 24, 'w'],
-  [16, 24, 'w'],
-  [17, 24, 'w'],
-  [18, 24, 'w'],
-  [19, 24, 'w'],
-  [12, 25, 'w'],
-  [13, 25, 'w'],
-  [14, 25, 'w'],
-  [15, 25, 'w'],
-  [16, 25, 'w'],
-  [17, 25, 'w'],
-  [18, 25, 'w'],
-  [13, 26, 'w'],
-  [14, 26, 'w'],
-  [15, 26, 'w'],
-  [16, 26, 'w'],
-  [17, 26, 'w'],
-]
-
-/** 특정 칸의 글자를 바꾼 새 행 배열 */
+/** 지정 픽셀만 바꾼 새 행 배열. 투명('.')과 외곽선('k')은 건드리지 않는다 */
 export function paint(rows: readonly string[], pixels: readonly Pixel[]): string[] {
   const out = rows.map((r) => r.split(''))
   for (const [x, y, ch] of pixels) {
     const row = out[y]
-    if (row && x >= 0 && x < row.length && row[x] !== '.' && row[x] !== 'k') row[x] = ch
+    if (!row) continue
+    const cur = row[x]
+    if (cur === undefined || cur === '.' || cur === 'k') continue
+    row[x] = ch
   }
   return out.map((r) => r.join(''))
 }
 
-/** 사각 영역 안에서 from 글자를 to 로 (포인트 칠하기) */
+/** 사각형(양 끝 포함) 안에서 from 에 든 글자를 to 로 */
 export function paintRect(
   rows: readonly string[],
   x0: number,
@@ -175,16 +85,83 @@ export function paintRect(
     let s = ''
     for (let x = 0; x < row.length; x++) {
       const ch = row[x] ?? '.'
-      s += x >= x0 && x <= x1 && ch === from ? to : ch
+      s += x >= x0 && x <= x1 && from.includes(ch) ? to : ch
     }
     return s
   })
 }
 
+/** 모든 행에서 글자 치환 (예: 줄무늬 'd' → 털 'r') */
+export function replaceAll(rows: readonly string[], from: string, to: string): string[] {
+  return rows.map((r) => r.replaceAll(from, to))
+}
+
+/** 턱 아래 그림자 두 줄 — 줄무늬('d')를 지운 고양이(우유·샴)가 그림자만 's' 로 되살릴 때 */
+export function chinShadow(rows: readonly string[]): string[] {
+  return paintRect(paintRect(rows, 23, 24, 32, 24, 'r', 's'), 26, 25, 32, 25, 'r', 's')
+}
+
+/** 공용 몸통에 캐릭터 팔레트(+선택적 행 편집)를 붙인 SpriteDef */
 export function catBody(
   id: string,
   palette: SpriteDef['palette'],
   edit: (rows: readonly string[]) => readonly string[] = (r) => r,
 ): SpriteDef & { points: typeof CAT_POINTS } {
-  return { id, w: 32, h: 32, palette, points: CAT_POINTS, rows: edit(CAT_ROWS) }
+  return { id, w: 42, h: 39, rows: edit(CAT_ROWS), palette, points: CAT_POINTS }
+}
+
+/**
+ * 식빵 자세 46×34 — 사용자 도안(docs/art/cat-design-loaf.png)을 8.25px 격자로 샘플링 → 3×3 최빈값 필터 → 손질.
+ * 추가 키 b = 빵 크러스트(오른쪽 어두운 면). 줄무늬 d 와 분리해 두어 우유/샴은 줄무늬만 지우고 크러스트 음영은 남긴다.
+ * 얼굴은 비워 두고 같은 15×9 얼굴 타일을 LOAF_POINTS.face 에 얹는다. 김(STEAM)은 LOAF_POINTS.steam 위치.
+ */
+export const LOAF_ROWS: readonly string[] = [
+  '.......................kkkkkkkk...............',
+  '...................kkkkrrrrrrddkkkk...........',
+  '...............kkkkdddddddrrrrdddrkkk.........',
+  '..kkk.......kkkrrrrrkkrrdddddrrrrddrrk........',
+  '.krrrkk..kkkrrrrrddkrrkrrrrddddrrrdrrrk.......',
+  '.krppdrkkrrrrrrrrdkrdrkdrrrrrdddrrrrrrdk......',
+  '.krpppdrkrrrrrrrrkrdpddkddrrrrddrrrrrrddk.....',
+  '.krpppdrkkkkkkkkkrdppddkdddrrrrrrrrrrrbbbk....',
+  '.krpprrrddrddrddkrdpppdkrddrrrrrrrrrrrbbbk....',
+  '.krdrrrrddrddrddrrdpppdkrrrrrrrrrrrrbbbbbk....',
+  '.kdrrrrrddrddrddccrddddkrrrrrrrrrrbbbbbbbk....',
+  '.krccrrrddrddrddcccrrddkrrrrrrrrbbbbbbbbk.....',
+  'krcccrrrrrrddrrrrrcccrdkrrrrrrbbbbbbbbbbk.....',
+  'krccrrrrrrrrrrrrrrrcccrkbbbbbbbbbbbbbbbbk.....',
+  'krrrrrrrrrrrrrrrrrrcccrkbbbbbbbbbbbbbbbbk.....',
+  'krrrrrrrrrrrrrrrrrrrccckbbbbbbbbbbbbbbbbkk....',
+  'krrrrrrrrrrrrrrrrrrrccckbbbbbbbbbbbbbbbbkddk..',
+  '.kdrrrrrrrrrrrrrrrrrrcrkbbbbbbbbbbbbbbbbkdddk.',
+  '.kdrrrrrrrrrrrrrrrrrrrdkbbbbbbbbbbbbbbbbkdddk.',
+  '.kdrrrrrcccccrrrrrrrrrdkbbbbbbbbdkkkddddkddddk',
+  '.krrrrcccccccccrrrrrrddkbbbbbbbbkcccddddkkddrk',
+  '.krrrcccccccccccrrrrdddkbbbbbbbbkccckdddkkdddk',
+  '.krrccccccccccccccrrdddkbbbbbbbbkcccckdddrrddk',
+  '.krcccccccccccccccrrrddkbbbbbbbbkcccrdddddrddk',
+  '.krcccccccccccccccccccckbbbbbbbbkcrrddrrddddk.',
+  '.krcccccccccccccccccccckbbbbbbbbdkddddrrddddk.',
+  '.krcccccccccccccccccccckbbbbbbbbddkdddddddkk..',
+  '.krcccccccccccccccccccckbbbbbbbbddkkkkkkkk....',
+  '.krcccccccccccccccccccckbbbbbbbbkk............',
+  '.krcckkkkkcckkkkkcccccckbbbbbbkk..............',
+  '..krkrrrrrkkrrrrrkccccckbbbbkk................',
+  '...kkccccckkccccckccccbkkkk...................',
+  '....kckckckkckckckcccckk......................',
+  '.....kkkkkkkkkkkkkkkkkk.......................',
+]
+
+export const LOAF_POINTS: Readonly<Record<'face' | 'steam', Point>> = {
+  face: { x: 3, y: 15 },
+  steam: { x: 17, y: -7 },
+}
+
+/** 식빵 자세 SpriteDef (팔레트는 몸통과 공유, b 키 필요) */
+export function catLoaf(
+  id: string,
+  palette: SpriteDef['palette'],
+  edit: (rows: readonly string[]) => readonly string[] = (r) => r,
+): SpriteDef & { points: typeof LOAF_POINTS } {
+  return { id, w: 46, h: 34, rows: edit(LOAF_ROWS), palette, points: LOAF_POINTS }
 }

@@ -717,3 +717,7 @@ export function applyCharacterTheme(c: CharacterDef, persist = true) {
 - `--accent`가 쓰이는 곳: 포커스 링, 메뉴 커서, 선택된 카드 테두리, `.btn.primary` 채움, PRESS START, HUD 라벨 밑줄, 말풍선 테두리, 결과 화면 NEW RECORD, 레벨/진행 바. 틴트 면은 `color-mix(in srgb, var(--accent) 18%, var(--bg-1))`. 게임 보드 내부 색(지뢰 숫자, 테트로미노)은 게임 소유라 accent의 영향을 받지 않는다.
 
 참고 링크: [Galmuri GitHub](https://github.com/quiple/galmuri), [galmuri.css on jsDelivr](https://cdn.jsdelivr.net/npm/galmuri/dist/galmuri.css)
+
+## 변경 이력
+
+- 2026-10-08: 캐릭터 도트를 사용자 도안(걷는 포즈, `docs/art/cat-design-walk.png`)으로 교체. 몸통 42×39, 얼굴 타일 15×9, 외곽선 색은 캐릭터별. 10/12 식빵 자세(`loaf` 무드, 46×34, `docs/art/cat-design-loaf.png`) 추가로 합성 스테이지는 46×43. 위 §3 의 24×24 / 32×32 수치와 펑이 예시는 초기 설계 기록이며 현재 코드는 `src/characters/template.ts` 가 기준.
